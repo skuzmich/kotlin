@@ -41,6 +41,11 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.metadata.K2MetadataCompiler
 import org.jetbrains.kotlin.config.Services
 import org.jetbrains.kotlin.daemon.common.*
+import org.jetbrains.kotlin.daemon.common.impls.*
+import org.jetbrains.kotlin.daemon.common.impls.DummyProfiler
+import org.jetbrains.kotlin.daemon.common.impls.Profiler
+import org.jetbrains.kotlin.daemon.common.impls.WallAndThreadAndMemoryTotalProfiler
+import org.jetbrains.kotlin.daemon.common.impls.WallAndThreadTotalProfiler
 import org.jetbrains.kotlin.daemon.report.CompileServicesFacadeMessageCollector
 import org.jetbrains.kotlin.daemon.report.DaemonMessageReporter
 import org.jetbrains.kotlin.daemon.report.DaemonMessageReporterPrintStreamAdapter
@@ -113,6 +118,7 @@ class CompileServiceImpl(
     private val log by lazy { Logger.getLogger("compiler") }
 
     init {
+        log.info("Running OLD server (port = $port)")
         System.setProperty(KOTLIN_COMPILER_ENVIRONMENT_KEEPALIVE_PROPERTY, "true")
     }
 

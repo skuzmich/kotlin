@@ -19,14 +19,13 @@ package org.jetbrains.kotlin.compilerRunner
 import org.jetbrains.kotlin.cli.common.ExitCode
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
-import org.jetbrains.kotlin.daemon.client.CompileServiceSession
-import org.jetbrains.kotlin.daemon.client.DaemonReportMessage
-import org.jetbrains.kotlin.daemon.client.DaemonReportingTargets
-import org.jetbrains.kotlin.daemon.client.KotlinCompilerClient
+import org.jetbrains.kotlin.daemon.client.*
 import org.jetbrains.kotlin.daemon.common.*
+import org.jetbrains.kotlin.daemon.common.impls.DaemonReportCategory
 import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.runBlocking
 
 object KotlinCompilerRunnerUtils {
     fun exitCodeFromProcessExitCode(log: KotlinLogger, code: Int): ExitCode {
@@ -60,17 +59,21 @@ object KotlinCompilerRunnerUtils {
 
         val profiler = if (daemonOptions.reportPerf) WallAndThreadAndMemoryTotalProfiler(withGC = false) else DummyProfiler()
 
-        val connection = profiler.withMeasure(null) {
-            KotlinCompilerClient.connectAndLease(
-                compilerId,
-                clientAliveFlagFile,
-                daemonJVMOptions,
-                daemonOptions,
-                daemonReportingTargets,
-                autostart = true,
-                leaseSession = true,
-                sessionAliveFlagFile = sessionAliveFlagFile
-            )
+        val kotlinCompilerClient = KotlinCompilerDaemonClient.instantiate(Version.RMI)
+
+        val connection = runBlocking {
+            profiler.withMeasure(null) {
+                kotlinCompilerClient.connectAndLease(
+                        compilerId,
+                        clientAliveFlagFile,
+                        daemonJVMOptions,
+                        daemonOptions,
+                        daemonReportingTargets,
+                        autostart = true,
+                        leaseSession = true,
+                        sessionAliveFlagFile = sessionAliveFlagFile
+                )
+            }
         }
 
         if (connection == null || isDebugEnabled) {

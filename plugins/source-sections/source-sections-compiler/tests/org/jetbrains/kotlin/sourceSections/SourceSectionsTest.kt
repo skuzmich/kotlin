@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.sourceSections
 
 import com.intellij.openapi.vfs.StandardFileSystems
 import junit.framework.TestCase
+import kotlinx.coroutines.experimental.runBlocking
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.CLITool
 import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
@@ -29,8 +30,10 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinToJVMBytecodeCompiler
 import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.daemon.client.DaemonReportingTargets
-import org.jetbrains.kotlin.daemon.client.KotlinCompilerClient
+import org.jetbrains.kotlin.daemon.client.KotlinCompilerDaemonClient
 import org.jetbrains.kotlin.daemon.common.*
+import org.jetbrains.kotlin.daemon.common.impls.ReportSeverity
+import org.jetbrains.kotlin.daemon.common.impls.threadCpuTime
 import org.jetbrains.kotlin.script.StandardScriptDefinition
 import org.jetbrains.kotlin.script.tryConstructClassFromStringArgs
 import org.jetbrains.kotlin.test.ConfigurationKind
@@ -59,7 +62,7 @@ class SourceSectionsTest : TestCaseWithTmpdir() {
     }
 
     val compilerClassPath = listOf(kotlinPaths.compilerPath)
-    val scriptRuntimeClassPath = listOf( kotlinPaths.stdlibPath, kotlinPaths.scriptRuntimePath)
+    val scriptRuntimeClassPath = listOf(kotlinPaths.stdlibPath, kotlinPaths.scriptRuntimePath)
     val sourceSectionsPluginJar = File(kotlinPaths.libPath, "kotlin-source-sections-compiler-plugin.jar")
     val compilerId by lazy(LazyThreadSafetyMode.NONE) { CompilerId.makeCompilerId(compilerClassPath) }
 
@@ -168,7 +171,7 @@ class SourceSectionsTest : TestCaseWithTmpdir() {
 
         fun Long.ms() = TimeUnit.NANOSECONDS.toMillis(this)
         TestCase.assertTrue("sourceSections plugin brings too much overheads: ${times.joinToString { "(${it.first.ms()}, ${it.second.ms()})" }} (expecting it to be faster than regular compilation due to less lines compiled)",
-                            adjustedMaxDiff.third < 20 /* assuming it measurement error */ || adjustedMaxDiff.first >= adjustedMaxDiff.second )
+                            adjustedMaxDiff.third < 20 /* assuming it measurement error */ || adjustedMaxDiff.first >= adjustedMaxDiff.second)
     }
 
     fun testSourceSectionCompileLocal() {
@@ -199,8 +202,14 @@ class SourceSectionsTest : TestCaseWithTmpdir() {
             val daemonJVMOptions = configureDaemonJVMOptions(inheritMemoryLimits = false, inheritOtherJvmOptions = false, inheritAdditionalProperties = false)
             val messageCollector = TestMessageCollector()
 
-            val daemonWithSession = KotlinCompilerClient.connectAndLease(compilerId, aliveFile, daemonJVMOptions, daemonOptions,
-                                                                         DaemonReportingTargets(messageCollector = messageCollector), autostart = true, leaseSession = true)
+            val kotlinCompilerClient = KotlinCompilerDaemonClient.instantiate(Version.RMI)
+
+            val daemonWithSession = runBlocking {
+                kotlinCompilerClient.connectAndLease(compilerId, aliveFile, daemonJVMOptions, daemonOptions,
+                                                     DaemonReportingTargets(
+                                                             messageCollector = messageCollector
+                                                     ), autostart = true, leaseSession = true)
+            }
             assertNotNull("failed to connect daemon:\ncompiler id: $compilerId\ndaemon opts: $daemonOptions\njvm opts: $daemonJVMOptions\nalive file: $aliveFile\n", daemonWithSession)
 
             try {
@@ -214,10 +223,12 @@ class SourceSectionsTest : TestCaseWithTmpdir() {
                     messageCollector.clear()
                     val outputs = arrayListOf<OutputMessageUtil.Output>()
 
-                    val code = KotlinCompilerClient.compile(daemonWithSession!!.compileService, daemonWithSession.sessionId, CompileService.TargetPlatform.JVM,
-                                                            args, messageCollector,
-                                                            { outFile, srcFiles -> outputs.add(OutputMessageUtil.Output(srcFiles, outFile)) },
-                                                            reportSeverity = ReportSeverity.DEBUG)
+                    val code = runBlocking {
+                        kotlinCompilerClient.compile(daemonWithSession!!.compileService, daemonWithSession.sessionId, CompileService.TargetPlatform.JVM,
+                                                     args, messageCollector,
+                                                     { outFile, srcFiles -> outputs.add(OutputMessageUtil.Output(srcFiles, outFile)) },
+                                                     reportSeverity = ReportSeverity.DEBUG)
+                    }
 
                     TestCase.assertEquals("Compilation failed:\n${messageCollector.messages.joinToString("\n")}", 0, code)
                     TestCase.assertFalse("Compilation failed:\n${messageCollector.messages.joinToString("\n")}", messageCollector.hasErrors())
@@ -226,9 +237,8 @@ class SourceSectionsTest : TestCaseWithTmpdir() {
 
                     verifyScriptOutput(loadScriptClass(scriptClassFile), expectedOutput)
                 }
-            }
-            finally {
-                daemonWithSession!!.compileService.shutdown()
+            } finally {
+                runBlocking { daemonWithSession!!.compileService.shutdown() }
             }
         }
     }
@@ -258,22 +268,20 @@ internal inline fun withFlagFile(prefix: String, suffix: String? = null, body: (
     val file = createTempFile(prefix, suffix)
     try {
         body(file)
-    }
-    finally {
+    } finally {
         file.delete()
     }
 }
 
-internal fun<T> captureOut(body: () -> T): Pair<String, T> {
+internal fun <T> captureOut(body: () -> T): Pair<String, T> {
     val outStream = ByteArrayOutputStream()
     val prevOut = System.out
     val prevErr = System.err
     System.setOut(PrintStream(outStream))
     System.setErr(PrintStream(outStream))
-    val res =try {
+    val res = try {
         body()
-    }
-    finally {
+    } finally {
         System.out.flush()
         System.setOut(prevOut)
         System.err.flush()
