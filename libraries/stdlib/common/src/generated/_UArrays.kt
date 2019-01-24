@@ -217,7 +217,7 @@ public inline operator fun UShortArray.component5(): UShort {
 
 /**
  * Returns an element at the given [index] or throws an [IndexOutOfBoundsException] if the [index] is out of bounds of this array.
- * 
+ *
  * @sample samples.collections.Collections.Elements.elementAt
  */
 @SinceKotlin("1.3")
@@ -229,7 +229,7 @@ public inline fun UIntArray.elementAt(index: Int): UInt {
 
 /**
  * Returns an element at the given [index] or throws an [IndexOutOfBoundsException] if the [index] is out of bounds of this array.
- * 
+ *
  * @sample samples.collections.Collections.Elements.elementAt
  */
 @SinceKotlin("1.3")
@@ -241,7 +241,7 @@ public inline fun ULongArray.elementAt(index: Int): ULong {
 
 /**
  * Returns an element at the given [index] or throws an [IndexOutOfBoundsException] if the [index] is out of bounds of this array.
- * 
+ *
  * @sample samples.collections.Collections.Elements.elementAt
  */
 @SinceKotlin("1.3")
@@ -253,7 +253,7 @@ public inline fun UByteArray.elementAt(index: Int): UByte {
 
 /**
  * Returns an element at the given [index] or throws an [IndexOutOfBoundsException] if the [index] is out of bounds of this array.
- * 
+ *
  * @sample samples.collections.Collections.Elements.elementAt
  */
 @SinceKotlin("1.3")
@@ -265,7 +265,7 @@ public inline fun UShortArray.elementAt(index: Int): UShort {
 
 /**
  * Returns an element at the given [index] or the result of calling the [defaultValue] function if the [index] is out of bounds of this array.
- * 
+ *
  * @sample samples.collections.Collections.Elements.elementAtOrElse
  */
 @SinceKotlin("1.3")
@@ -277,7 +277,7 @@ public inline fun UIntArray.elementAtOrElse(index: Int, defaultValue: (Int) -> U
 
 /**
  * Returns an element at the given [index] or the result of calling the [defaultValue] function if the [index] is out of bounds of this array.
- * 
+ *
  * @sample samples.collections.Collections.Elements.elementAtOrElse
  */
 @SinceKotlin("1.3")
@@ -289,7 +289,7 @@ public inline fun ULongArray.elementAtOrElse(index: Int, defaultValue: (Int) -> 
 
 /**
  * Returns an element at the given [index] or the result of calling the [defaultValue] function if the [index] is out of bounds of this array.
- * 
+ *
  * @sample samples.collections.Collections.Elements.elementAtOrElse
  */
 @SinceKotlin("1.3")
@@ -301,7 +301,7 @@ public inline fun UByteArray.elementAtOrElse(index: Int, defaultValue: (Int) -> 
 
 /**
  * Returns an element at the given [index] or the result of calling the [defaultValue] function if the [index] is out of bounds of this array.
- * 
+ *
  * @sample samples.collections.Collections.Elements.elementAtOrElse
  */
 @SinceKotlin("1.3")
@@ -313,7 +313,7 @@ public inline fun UShortArray.elementAtOrElse(index: Int, defaultValue: (Int) ->
 
 /**
  * Returns an element at the given [index] or `null` if the [index] is out of bounds of this array.
- * 
+ *
  * @sample samples.collections.Collections.Elements.elementAtOrNull
  */
 @SinceKotlin("1.3")
@@ -325,7 +325,7 @@ public inline fun UIntArray.elementAtOrNull(index: Int): UInt? {
 
 /**
  * Returns an element at the given [index] or `null` if the [index] is out of bounds of this array.
- * 
+ *
  * @sample samples.collections.Collections.Elements.elementAtOrNull
  */
 @SinceKotlin("1.3")
@@ -337,7 +337,7 @@ public inline fun ULongArray.elementAtOrNull(index: Int): ULong? {
 
 /**
  * Returns an element at the given [index] or `null` if the [index] is out of bounds of this array.
- * 
+ *
  * @sample samples.collections.Collections.Elements.elementAtOrNull
  */
 @SinceKotlin("1.3")
@@ -349,7 +349,7 @@ public inline fun UByteArray.elementAtOrNull(index: Int): UByte? {
 
 /**
  * Returns an element at the given [index] or `null` if the [index] is out of bounds of this array.
- * 
+ *
  * @sample samples.collections.Collections.Elements.elementAtOrNull
  */
 @SinceKotlin("1.3")
@@ -1512,6 +1512,178 @@ public inline fun UShortArray.reversedArray(): UShortArray {
 }
 
 /**
+ * Returns a list containing elements at indices in the specified [indices] range.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun UIntArray.slice(indices: IntRange): List<UInt> {
+    if (indices.isEmpty()) return listOf()
+    return copyOfRange(indices.start, indices.endInclusive + 1).asList()
+}
+
+/**
+ * Returns a list containing elements at indices in the specified [indices] range.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun ULongArray.slice(indices: IntRange): List<ULong> {
+    if (indices.isEmpty()) return listOf()
+    return copyOfRange(indices.start, indices.endInclusive + 1).asList()
+}
+
+/**
+ * Returns a list containing elements at indices in the specified [indices] range.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun UByteArray.slice(indices: IntRange): List<UByte> {
+    if (indices.isEmpty()) return listOf()
+    return copyOfRange(indices.start, indices.endInclusive + 1).asList()
+}
+
+/**
+ * Returns a list containing elements at indices in the specified [indices] range.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun UShortArray.slice(indices: IntRange): List<UShort> {
+    if (indices.isEmpty()) return listOf()
+    return copyOfRange(indices.start, indices.endInclusive + 1).asList()
+}
+
+/**
+ * Returns a list containing elements at specified [indices].
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun UIntArray.slice(indices: Iterable<Int>): List<UInt> {
+    val size = indices.collectionSizeOrDefault(10)
+    if (size == 0) return emptyList()
+    val list = ArrayList<UInt>(size)
+    for (index in indices) {
+        list.add(get(index))
+    }
+    return list
+}
+
+/**
+ * Returns a list containing elements at specified [indices].
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun ULongArray.slice(indices: Iterable<Int>): List<ULong> {
+    val size = indices.collectionSizeOrDefault(10)
+    if (size == 0) return emptyList()
+    val list = ArrayList<ULong>(size)
+    for (index in indices) {
+        list.add(get(index))
+    }
+    return list
+}
+
+/**
+ * Returns a list containing elements at specified [indices].
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun UByteArray.slice(indices: Iterable<Int>): List<UByte> {
+    val size = indices.collectionSizeOrDefault(10)
+    if (size == 0) return emptyList()
+    val list = ArrayList<UByte>(size)
+    for (index in indices) {
+        list.add(get(index))
+    }
+    return list
+}
+
+/**
+ * Returns a list containing elements at specified [indices].
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun UShortArray.slice(indices: Iterable<Int>): List<UShort> {
+    val size = indices.collectionSizeOrDefault(10)
+    if (size == 0) return emptyList()
+    val list = ArrayList<UShort>(size)
+    for (index in indices) {
+        list.add(get(index))
+    }
+    return list
+}
+
+/**
+ * Returns an array containing elements of this array at specified [indices].
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun UIntArray.sliceArray(indices: Collection<Int>): UIntArray {
+    return UIntArray(storage.sliceArray(indices))
+}
+
+/**
+ * Returns an array containing elements of this array at specified [indices].
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun ULongArray.sliceArray(indices: Collection<Int>): ULongArray {
+    return ULongArray(storage.sliceArray(indices))
+}
+
+/**
+ * Returns an array containing elements of this array at specified [indices].
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun UByteArray.sliceArray(indices: Collection<Int>): UByteArray {
+    return UByteArray(storage.sliceArray(indices))
+}
+
+/**
+ * Returns an array containing elements of this array at specified [indices].
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun UShortArray.sliceArray(indices: Collection<Int>): UShortArray {
+    return UShortArray(storage.sliceArray(indices))
+}
+
+/**
+ * Returns an array containing elements at indices in the specified [indices] range.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun UIntArray.sliceArray(indices: IntRange): UIntArray {
+    return UIntArray(storage.sliceArray(indices))
+}
+
+/**
+ * Returns an array containing elements at indices in the specified [indices] range.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun ULongArray.sliceArray(indices: IntRange): ULongArray {
+    return ULongArray(storage.sliceArray(indices))
+}
+
+/**
+ * Returns an array containing elements at indices in the specified [indices] range.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun UByteArray.sliceArray(indices: IntRange): UByteArray {
+    return UByteArray(storage.sliceArray(indices))
+}
+
+/**
+ * Returns an array containing elements at indices in the specified [indices] range.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public fun UShortArray.sliceArray(indices: IntRange): UShortArray {
+    return UShortArray(storage.sliceArray(indices))
+}
+
+/**
  * Returns an array of type [ByteArray], which is a view of this array where each element is a signed reinterpretation
  * of the corresponding element of this array.
  */
@@ -1532,6 +1704,34 @@ public inline fun UByteArray.asByteArray(): ByteArray {
 public inline fun UIntArray.asIntArray(): IntArray {
     return storage
 }
+
+/**
+ * Returns a [List] that wraps the original array.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public expect fun UIntArray.asList(): List<UInt>
+
+/**
+ * Returns a [List] that wraps the original array.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public expect fun ULongArray.asList(): List<ULong>
+
+/**
+ * Returns a [List] that wraps the original array.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public expect fun UByteArray.asList(): List<UByte>
+
+/**
+ * Returns a [List] that wraps the original array.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public expect fun UShortArray.asList(): List<UShort>
 
 /**
  * Returns an array of type [LongArray], which is a view of this array where each element is a signed reinterpretation
@@ -2333,7 +2533,7 @@ public inline fun ShortArray.toUShortArray(): UShortArray {
 
 /**
  * Returns `true` if all elements match the given [predicate].
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.all
  */
 @SinceKotlin("1.3")
@@ -2346,7 +2546,7 @@ public inline fun UIntArray.all(predicate: (UInt) -> Boolean): Boolean {
 
 /**
  * Returns `true` if all elements match the given [predicate].
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.all
  */
 @SinceKotlin("1.3")
@@ -2359,7 +2559,7 @@ public inline fun ULongArray.all(predicate: (ULong) -> Boolean): Boolean {
 
 /**
  * Returns `true` if all elements match the given [predicate].
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.all
  */
 @SinceKotlin("1.3")
@@ -2372,7 +2572,7 @@ public inline fun UByteArray.all(predicate: (UByte) -> Boolean): Boolean {
 
 /**
  * Returns `true` if all elements match the given [predicate].
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.all
  */
 @SinceKotlin("1.3")
@@ -2385,7 +2585,7 @@ public inline fun UShortArray.all(predicate: (UShort) -> Boolean): Boolean {
 
 /**
  * Returns `true` if array has at least one element.
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.any
  */
 @SinceKotlin("1.3")
@@ -2397,7 +2597,7 @@ public inline fun UIntArray.any(): Boolean {
 
 /**
  * Returns `true` if array has at least one element.
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.any
  */
 @SinceKotlin("1.3")
@@ -2409,7 +2609,7 @@ public inline fun ULongArray.any(): Boolean {
 
 /**
  * Returns `true` if array has at least one element.
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.any
  */
 @SinceKotlin("1.3")
@@ -2421,7 +2621,7 @@ public inline fun UByteArray.any(): Boolean {
 
 /**
  * Returns `true` if array has at least one element.
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.any
  */
 @SinceKotlin("1.3")
@@ -2433,7 +2633,7 @@ public inline fun UShortArray.any(): Boolean {
 
 /**
  * Returns `true` if at least one element matches the given [predicate].
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.anyWithPredicate
  */
 @SinceKotlin("1.3")
@@ -2446,7 +2646,7 @@ public inline fun UIntArray.any(predicate: (UInt) -> Boolean): Boolean {
 
 /**
  * Returns `true` if at least one element matches the given [predicate].
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.anyWithPredicate
  */
 @SinceKotlin("1.3")
@@ -2459,7 +2659,7 @@ public inline fun ULongArray.any(predicate: (ULong) -> Boolean): Boolean {
 
 /**
  * Returns `true` if at least one element matches the given [predicate].
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.anyWithPredicate
  */
 @SinceKotlin("1.3")
@@ -2472,7 +2672,7 @@ public inline fun UByteArray.any(predicate: (UByte) -> Boolean): Boolean {
 
 /**
  * Returns `true` if at least one element matches the given [predicate].
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.anyWithPredicate
  */
 @SinceKotlin("1.3")
@@ -2533,7 +2733,7 @@ public inline fun UShortArray.count(predicate: (UShort) -> Boolean): Int {
 
 /**
  * Returns `true` if the array has no elements.
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.none
  */
 @SinceKotlin("1.3")
@@ -2545,7 +2745,7 @@ public inline fun UIntArray.none(): Boolean {
 
 /**
  * Returns `true` if the array has no elements.
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.none
  */
 @SinceKotlin("1.3")
@@ -2557,7 +2757,7 @@ public inline fun ULongArray.none(): Boolean {
 
 /**
  * Returns `true` if the array has no elements.
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.none
  */
 @SinceKotlin("1.3")
@@ -2569,7 +2769,7 @@ public inline fun UByteArray.none(): Boolean {
 
 /**
  * Returns `true` if the array has no elements.
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.none
  */
 @SinceKotlin("1.3")
@@ -2581,7 +2781,7 @@ public inline fun UShortArray.none(): Boolean {
 
 /**
  * Returns `true` if no elements match the given [predicate].
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.noneWithPredicate
  */
 @SinceKotlin("1.3")
@@ -2594,7 +2794,7 @@ public inline fun UIntArray.none(predicate: (UInt) -> Boolean): Boolean {
 
 /**
  * Returns `true` if no elements match the given [predicate].
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.noneWithPredicate
  */
 @SinceKotlin("1.3")
@@ -2607,7 +2807,7 @@ public inline fun ULongArray.none(predicate: (ULong) -> Boolean): Boolean {
 
 /**
  * Returns `true` if no elements match the given [predicate].
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.noneWithPredicate
  */
 @SinceKotlin("1.3")
@@ -2620,7 +2820,7 @@ public inline fun UByteArray.none(predicate: (UByte) -> Boolean): Boolean {
 
 /**
  * Returns `true` if no elements match the given [predicate].
- * 
+ *
  * @sample samples.collections.Collections.Aggregates.noneWithPredicate
  */
 @SinceKotlin("1.3")
