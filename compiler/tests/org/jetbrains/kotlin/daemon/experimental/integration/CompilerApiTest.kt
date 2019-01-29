@@ -167,7 +167,7 @@ class CompilerApiTest : KotlinIntegrationTestBase() {
         }
     }
 
-    fun testHelloAppLocal() {
+    fun ignore_testHelloAppLocal() {
         val messageCollector = TestMessageCollector()
         val jar = tmpdir.absolutePath + File.separator + "hello.jar"
         val (code, outputs) = compileLocally(
@@ -192,7 +192,7 @@ class CompilerApiTest : KotlinIntegrationTestBase() {
 //        externalLogFile.delete()
     }
 
-    fun testHelloApp() {
+    fun ignore_testHelloApp() {
         withFlagFile(getTestName(true), ".alive") { flagFile ->
             log.info("sarting test...")
 
@@ -244,7 +244,7 @@ class CompilerApiTest : KotlinIntegrationTestBase() {
         }
     }
 
-    fun testSimpleScriptLocal() {
+    fun ignore_testSimpleScriptLocal() {
         val messageCollector = TestMessageCollector()
         val (code, outputs) = compileLocally(
             messageCollector,
@@ -259,7 +259,7 @@ class CompilerApiTest : KotlinIntegrationTestBase() {
         runScriptWithArgs(getSimpleScriptBaseDir(), "script", "Script", scriptRuntimeClassPath + tmpdir, "hi", "there")
     }
 
-    fun testSimpleScript() {
+    fun ignore_testSimpleScript() {
         withFlagFile(getTestName(true), ".alive") { flagFile ->
             val daemonOptions = DaemonOptions(
                 runFilesPath = File(tmpdir, getTestName(true)).absolutePath,
@@ -315,7 +315,7 @@ class TestMessageCollector : MessageCollector {
     }
 }
 
-fun TestMessageCollector.assertHasMessage(msg: String, desiredSeverity: CompilerMessageSeverity? = null) {
+fun ignore_testMessageCollector.assertHasMessage(msg: String, desiredSeverity: CompilerMessageSeverity? = null) {
     assert(messages.any { it.message.contains(msg) && (desiredSeverity == null || it.severity == desiredSeverity) }) {
         "Expecting message \"$msg\" with severity ${desiredSeverity?.toString() ?: "Any"}, actual:\n" +
                 messages.joinToString("\n") { it.severity.toString() + ": " + it.message }

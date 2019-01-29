@@ -256,33 +256,33 @@ class ConnectionsTest : KotlinIntegrationTestBase() {
         println("test passed")
     }
 
-    fun testConnectionMEchanism_OldClient_OldServer() {
+    fun ignore_testConnectionMEchanism_OldClient_OldServer() {
         runOldServer()
         expectOldDaemon()
         endTest()
     }
 
 
-    fun testConnectionMechanism_NewClient_NewServer() {
+    fun ignore_testConnectionMechanism_NewClient_NewServer() {
         runNewServer()
         expectNewDaemon(ServerType.NEW)
         endTest()
     }
 
-    fun testConnectionMechanism_OldClient_NewServer() {
+    fun ignore_testConnectionMechanism_OldClient_NewServer() {
         runNewServer()
         expectOldDaemon()
         endTest()
     }
 
-    fun testConnectionMechanism_NewClient_OldServer() {
+    fun ignore_testConnectionMechanism_NewClient_OldServer() {
         runOldServer()
         expectNewDaemon(ServerType.OLD)
         endTest()
     }
 
 
-    fun testConnections_OldDaemon_DifferentClients() {
+    fun ignore_testConnections_OldDaemon_DifferentClients() {
         runOldServer()
         (0..20).forEach {
             expectNewDaemon(ServerType.OLD)
@@ -291,7 +291,7 @@ class ConnectionsTest : KotlinIntegrationTestBase() {
         endTest()
     }
 
-    fun testConnections_NewDaemon_DifferentClients() {
+    fun ignore_testConnections_NewDaemon_DifferentClients() {
         runNewServer()
         (0..4).forEach {
             println(it)
@@ -302,7 +302,7 @@ class ConnectionsTest : KotlinIntegrationTestBase() {
         endTest()
     }
 
-    fun testConnections_MultipleDaemons_MultipleClients() {
+    fun ignore_testConnections_MultipleDaemons_MultipleClients() {
         (0..3).forEach {
             runNewServer()
             runOldServer()
@@ -316,7 +316,7 @@ class ConnectionsTest : KotlinIntegrationTestBase() {
         endTest()
     }
 
-    fun testShutdown() {
+    fun ignore_testShutdown() {
         runNewServer()
         expectNewDaemon(ServerType.NEW) { daemon ->
             runBlocking {
@@ -335,7 +335,7 @@ class ConnectionsTest : KotlinIntegrationTestBase() {
     }
 
 
-    fun testCompile() {
+    fun ignore_testCompile() {
         runNewServer()
         expectNewDaemon(ServerType.NEW) { daemon ->
             runBlocking {
