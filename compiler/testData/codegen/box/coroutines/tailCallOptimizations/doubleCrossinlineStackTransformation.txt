@@ -1,0 +1,206 @@
+@kotlin.Metadata
+@kotlin.coroutines.jvm.internal.DebugMetadata
+final class DoubleCrossinlineStackTransformationKt$box$1$f1$1$consumeEach$1 {
+    field I$0: int
+    field I$1: int
+    field L$0: java.lang.Object
+    field L$1: java.lang.Object
+    field label: int
+    synthetic field result: java.lang.Object
+    synthetic final field this$0: DoubleCrossinlineStackTransformationKt$box$1$f1$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1$f1$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1$f1$1$consumeEach$1
+    method <init>(p0: DoubleCrossinlineStackTransformationKt$box$1$f1$1, p1: kotlin.coroutines.Continuation): void
+    public final @org.jetbrains.annotations.Nullable method invokeSuspend(@org.jetbrains.annotations.NotNull p0: java.lang.Object): java.lang.Object
+}
+
+@kotlin.Metadata
+public final class DoubleCrossinlineStackTransformationKt$box$1$f1$1 {
+    inner class DoubleCrossinlineStackTransformationKt$box$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1$f1$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1$f1$1$consumeEach$1
+    method <init>(): void
+    public @org.jetbrains.annotations.Nullable method consumeEach(@org.jetbrains.annotations.NotNull p0: FlowConsumer, @org.jetbrains.annotations.NotNull p1: kotlin.coroutines.Continuation): java.lang.Object
+}
+
+@kotlin.Metadata
+public final class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$consumeEach$1$1 {
+    field label: int
+    synthetic field result: java.lang.Object
+    synthetic final field this$0: DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$consumeEach$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$consumeEach$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$consumeEach$1$1
+    public method <init>(p0: DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$consumeEach$1, p1: kotlin.coroutines.Continuation): void
+    public final @org.jetbrains.annotations.Nullable method invokeSuspend(@org.jetbrains.annotations.NotNull p0: java.lang.Object): java.lang.Object
+}
+
+@kotlin.Metadata
+public final class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$consumeEach$1 {
+    synthetic final field this$0: DoubleCrossinlineStackTransformationKt$box$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$consumeEach$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$consumeEach$1$1
+    public method <init>(p0: DoubleCrossinlineStackTransformationKt$box$1): void
+    public @org.jetbrains.annotations.Nullable method consume(p0: java.lang.Object, @org.jetbrains.annotations.NotNull p1: kotlin.coroutines.Continuation): java.lang.Object
+}
+
+@kotlin.Metadata
+@kotlin.coroutines.jvm.internal.DebugMetadata
+public final class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1$1 {
+    field L$0: java.lang.Object
+    field L$1: java.lang.Object
+    field L$2: java.lang.Object
+    field label: int
+    synthetic field result: java.lang.Object
+    synthetic final field this$0: DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1$1
+    public method <init>(p0: DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1, p1: kotlin.coroutines.Continuation): void
+    public final @org.jetbrains.annotations.Nullable method invokeSuspend(@org.jetbrains.annotations.NotNull p0: java.lang.Object): java.lang.Object
+}
+
+@kotlin.Metadata
+@kotlin.coroutines.jvm.internal.DebugMetadata
+public final class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1$2$1 {
+    field I$0: int
+    field L$0: java.lang.Object
+    field L$1: java.lang.Object
+    field L$2: java.lang.Object
+    field L$3: java.lang.Object
+    field L$4: java.lang.Object
+    field label: int
+    synthetic field result: java.lang.Object
+    synthetic final field this$0: DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1$2
+    inner class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1$2
+    inner class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1$2$1
+    public method <init>(p0: DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1$2, p1: kotlin.coroutines.Continuation): void
+    public final @org.jetbrains.annotations.Nullable method invokeSuspend(@org.jetbrains.annotations.NotNull p0: java.lang.Object): java.lang.Object
+}
+
+@kotlin.Metadata
+public final class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1$2 {
+    synthetic final field $consumer$inlined: FlowConsumer
+    synthetic final field this$0: DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1$2
+    inner class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1$2$1
+    public method <init>(p0: DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1, p1: FlowConsumer): void
+    public @org.jetbrains.annotations.Nullable method consume(p0: java.lang.Object, @org.jetbrains.annotations.NotNull p1: kotlin.coroutines.Continuation): java.lang.Object
+}
+
+@kotlin.Metadata
+public final class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1 {
+    synthetic final field $this_onEach: Flow
+    inner class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1$invokeSuspend$$inlined$onEach$1$1
+    public method <init>(p0: Flow): void
+    public @org.jetbrains.annotations.Nullable method consumeEach(@org.jetbrains.annotations.NotNull p0: FlowConsumer, @org.jetbrains.annotations.NotNull p1: kotlin.coroutines.Continuation): java.lang.Object
+}
+
+@kotlin.coroutines.jvm.internal.DebugMetadata
+@kotlin.Metadata
+final class DoubleCrossinlineStackTransformationKt$box$1 {
+    synthetic final field $log: kotlin.jvm.internal.Ref$ObjectRef
+    field L$0: java.lang.Object
+    field L$1: java.lang.Object
+    field L$2: java.lang.Object
+    field label: int
+    inner class DoubleCrossinlineStackTransformationKt$box$1
+    inner class DoubleCrossinlineStackTransformationKt$box$1$f1$1
+    method <init>(p0: kotlin.jvm.internal.Ref$ObjectRef, p1: kotlin.coroutines.Continuation): void
+    public final @org.jetbrains.annotations.NotNull method create(@org.jetbrains.annotations.NotNull p0: kotlin.coroutines.Continuation): kotlin.coroutines.Continuation
+    public final method invoke(p0: java.lang.Object): java.lang.Object
+    public final @org.jetbrains.annotations.Nullable method invokeSuspend(@org.jetbrains.annotations.NotNull p0: java.lang.Object): java.lang.Object
+}
+
+@kotlin.Metadata
+public final class DoubleCrossinlineStackTransformationKt$consumeEach$2$consume$1 {
+    field label: int
+    synthetic field result: java.lang.Object
+    synthetic final field this$0: DoubleCrossinlineStackTransformationKt$consumeEach$2
+    inner class DoubleCrossinlineStackTransformationKt$consumeEach$2
+    inner class DoubleCrossinlineStackTransformationKt$consumeEach$2$consume$1
+    public method <init>(p0: DoubleCrossinlineStackTransformationKt$consumeEach$2, p1: kotlin.coroutines.Continuation): void
+    public final @org.jetbrains.annotations.Nullable method invokeSuspend(@org.jetbrains.annotations.NotNull p0: java.lang.Object): java.lang.Object
+}
+
+@kotlin.Metadata
+public final class DoubleCrossinlineStackTransformationKt$consumeEach$2 {
+    synthetic final field $action: kotlin.jvm.functions.Function2
+    inner class DoubleCrossinlineStackTransformationKt$consumeEach$2
+    inner class DoubleCrossinlineStackTransformationKt$consumeEach$2$consume$1
+    public method <init>(p0: kotlin.jvm.functions.Function2): void
+    public @org.jetbrains.annotations.Nullable method consume(p0: java.lang.Object, @org.jetbrains.annotations.NotNull p1: kotlin.coroutines.Continuation): java.lang.Object
+}
+
+@kotlin.Metadata
+public final class DoubleCrossinlineStackTransformationKt$onEach$1$consumeEach$$inlined$consumeEach$1$1 {
+    field label: int
+    synthetic field result: java.lang.Object
+    synthetic final field this$0: DoubleCrossinlineStackTransformationKt$onEach$1$consumeEach$$inlined$consumeEach$1
+    inner class DoubleCrossinlineStackTransformationKt$onEach$1$consumeEach$$inlined$consumeEach$1
+    inner class DoubleCrossinlineStackTransformationKt$onEach$1$consumeEach$$inlined$consumeEach$1$1
+    public method <init>(p0: DoubleCrossinlineStackTransformationKt$onEach$1$consumeEach$$inlined$consumeEach$1, p1: kotlin.coroutines.Continuation): void
+    public final @org.jetbrains.annotations.Nullable method invokeSuspend(@org.jetbrains.annotations.NotNull p0: java.lang.Object): java.lang.Object
+}
+
+@kotlin.Metadata
+public final class DoubleCrossinlineStackTransformationKt$onEach$1$consumeEach$$inlined$consumeEach$1 {
+    synthetic final field $consumer$inlined: FlowConsumer
+    synthetic final field this$0: DoubleCrossinlineStackTransformationKt$onEach$1
+    inner class DoubleCrossinlineStackTransformationKt$onEach$1$consumeEach$$inlined$consumeEach$1
+    inner class DoubleCrossinlineStackTransformationKt$onEach$1$consumeEach$$inlined$consumeEach$1$1
+    public method <init>(p0: DoubleCrossinlineStackTransformationKt$onEach$1, p1: FlowConsumer): void
+    public @org.jetbrains.annotations.Nullable method consume(p0: java.lang.Object, @org.jetbrains.annotations.NotNull p1: kotlin.coroutines.Continuation): java.lang.Object
+}
+
+@kotlin.Metadata
+public final class DoubleCrossinlineStackTransformationKt$onEach$1$consumeEach$1 {
+    field label: int
+    synthetic field result: java.lang.Object
+    synthetic final field this$0: DoubleCrossinlineStackTransformationKt$onEach$1
+    inner class DoubleCrossinlineStackTransformationKt$onEach$1
+    inner class DoubleCrossinlineStackTransformationKt$onEach$1$consumeEach$1
+    public method <init>(p0: DoubleCrossinlineStackTransformationKt$onEach$1, p1: kotlin.coroutines.Continuation): void
+    public final @org.jetbrains.annotations.Nullable method invokeSuspend(@org.jetbrains.annotations.NotNull p0: java.lang.Object): java.lang.Object
+}
+
+@kotlin.Metadata
+public final class DoubleCrossinlineStackTransformationKt$onEach$1 {
+    synthetic final field $action: kotlin.jvm.functions.Function2
+    synthetic final field $this_onEach: Flow
+    inner class DoubleCrossinlineStackTransformationKt$onEach$1
+    inner class DoubleCrossinlineStackTransformationKt$onEach$1$consumeEach$1
+    public method <init>(p0: Flow, p1: kotlin.jvm.functions.Function2): void
+    public @org.jetbrains.annotations.Nullable method consumeEach(@org.jetbrains.annotations.NotNull p0: FlowConsumer, @org.jetbrains.annotations.NotNull p1: kotlin.coroutines.Continuation): java.lang.Object
+}
+
+@kotlin.Metadata
+final class DoubleCrossinlineStackTransformationKt$suspendMe$2$1 {
+    synthetic final field $it: kotlin.coroutines.Continuation
+    inner class DoubleCrossinlineStackTransformationKt$suspendMe$2$1
+    method <init>(p0: kotlin.coroutines.Continuation): void
+    public synthetic method invoke(): java.lang.Object
+    public final method invoke(): void
+}
+
+@kotlin.Metadata
+public final class DoubleCrossinlineStackTransformationKt {
+    inner class DoubleCrossinlineStackTransformationKt$box$1
+    inner class DoubleCrossinlineStackTransformationKt$consumeEach$2
+    inner class DoubleCrossinlineStackTransformationKt$onEach$1
+    public final static @org.jetbrains.annotations.NotNull method box(): java.lang.String
+    public final static method builder(@org.jetbrains.annotations.NotNull p0: kotlin.jvm.functions.Function1): void
+    private final static method consumeEach(@org.jetbrains.annotations.NotNull p0: Flow, p1: kotlin.jvm.functions.Function2, p2: kotlin.coroutines.Continuation): java.lang.Object
+    public final static @org.jetbrains.annotations.NotNull method onEach(@org.jetbrains.annotations.NotNull p0: Flow, @org.jetbrains.annotations.NotNull p1: kotlin.jvm.functions.Function2): Flow
+    public final static @org.jetbrains.annotations.Nullable method suspendMe(@org.jetbrains.annotations.NotNull p0: kotlin.coroutines.Continuation): java.lang.Object
+}
+
+@kotlin.Metadata
+public interface Flow {
+    public abstract @org.jetbrains.annotations.Nullable method consumeEach(@org.jetbrains.annotations.NotNull p0: FlowConsumer, @org.jetbrains.annotations.NotNull p1: kotlin.coroutines.Continuation): java.lang.Object
+}
+
+@kotlin.Metadata
+public interface FlowConsumer {
+    public abstract @org.jetbrains.annotations.Nullable method consume(p0: java.lang.Object, @org.jetbrains.annotations.NotNull p1: kotlin.coroutines.Continuation): java.lang.Object
+}

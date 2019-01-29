@@ -8,8 +8,8 @@ package org.jetbrains.kotlin.codegen
 
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
-import org.jetbrains.kotlin.codegen.binding.CodegenBinding
 import org.jetbrains.kotlin.builtins.UnsignedTypes
+import org.jetbrains.kotlin.codegen.binding.CodegenBinding
 import org.jetbrains.kotlin.codegen.context.CodegenContext
 import org.jetbrains.kotlin.codegen.context.FieldOwnerContext
 import org.jetbrains.kotlin.codegen.context.MultifileClassFacadeContext
@@ -58,6 +58,7 @@ import org.jetbrains.org.objectweb.asm.Opcodes.*
 import org.jetbrains.org.objectweb.asm.Type
 import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 import org.jetbrains.org.objectweb.asm.commons.Method
+import org.jetbrains.org.objectweb.asm.tree.InsnList
 import org.jetbrains.org.objectweb.asm.tree.MethodNode
 import org.jetbrains.org.objectweb.asm.util.Textifier
 import org.jetbrains.org.objectweb.asm.util.TraceMethodVisitor
@@ -428,6 +429,15 @@ fun MethodNode.textifyMethodNode(): String {
     val tmv = TraceMethodVisitor(text)
     this.instructions.asSequence().forEach { it.accept(tmv) }
     localVariables.forEach { text.visitLocalVariable(it.name, it.desc, it.signature, it.start.label, it.end.label, it.index) }
+    val sw = StringWriter()
+    text.print(PrintWriter(sw))
+    return "$sw"
+}
+
+fun InsnList.textifyInsnList(): String {
+    val text = Textifier()
+    val tmv = TraceMethodVisitor(text)
+    this.asSequence().forEach { it.accept(tmv) }
     val sw = StringWriter()
     text.print(PrintWriter(sw))
     return "$sw"

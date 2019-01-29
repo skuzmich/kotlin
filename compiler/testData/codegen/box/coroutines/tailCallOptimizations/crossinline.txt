@@ -16,13 +16,8 @@ public final class CrossinlineKt$box$1$filter$$inlined$source$1$1 {
     public final @org.jetbrains.annotations.Nullable method invokeSuspend(@org.jetbrains.annotations.NotNull p0: java.lang.Object): java.lang.Object
 }
 
-@kotlin.coroutines.jvm.internal.DebugMetadata
 @kotlin.Metadata
 public final class CrossinlineKt$box$1$filter$$inlined$source$1$lambda$1$1 {
-    field L$0: java.lang.Object
-    field L$1: java.lang.Object
-    field L$2: java.lang.Object
-    field L$3: java.lang.Object
     field label: int
     synthetic field result: java.lang.Object
     synthetic final field this$0: CrossinlineKt$box$1$filter$$inlined$source$1$lambda$1
@@ -93,13 +88,8 @@ public final class CrossinlineKt$box$1$invokeSuspend$$inlined$filter$1$1 {
     public final @org.jetbrains.annotations.Nullable method invokeSuspend(@org.jetbrains.annotations.NotNull p0: java.lang.Object): java.lang.Object
 }
 
-@kotlin.coroutines.jvm.internal.DebugMetadata
 @kotlin.Metadata
 public final class CrossinlineKt$box$1$invokeSuspend$$inlined$filter$1$2$1 {
-    field L$0: java.lang.Object
-    field L$1: java.lang.Object
-    field L$2: java.lang.Object
-    field L$3: java.lang.Object
     field label: int
     synthetic field result: java.lang.Object
     synthetic final field this$0: CrossinlineKt$box$1$invokeSuspend$$inlined$filter$1$2
@@ -195,13 +185,8 @@ public final class CrossinlineKt$filter$$inlined$source$1$1 {
     public final @org.jetbrains.annotations.Nullable method invokeSuspend(@org.jetbrains.annotations.NotNull p0: java.lang.Object): java.lang.Object
 }
 
-@kotlin.coroutines.jvm.internal.DebugMetadata
 @kotlin.Metadata
 public final class CrossinlineKt$filter$$inlined$source$1$lambda$1$1 {
-    field L$0: java.lang.Object
-    field L$1: java.lang.Object
-    field L$2: java.lang.Object
-    field L$3: java.lang.Object
     field label: int
     synthetic field result: java.lang.Object
     synthetic final field this$0: CrossinlineKt$filter$$inlined$source$1$lambda$1

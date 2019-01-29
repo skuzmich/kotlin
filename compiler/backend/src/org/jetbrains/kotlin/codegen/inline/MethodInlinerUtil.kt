@@ -17,10 +17,12 @@
 package org.jetbrains.kotlin.codegen.inline
 
 import org.jetbrains.kotlin.codegen.optimization.common.InsnSequence
+import org.jetbrains.kotlin.codegen.optimization.common.asSequence
 import org.jetbrains.kotlin.codegen.optimization.common.isMeaningful
 import org.jetbrains.kotlin.codegen.optimization.fixStack.top
 import org.jetbrains.kotlin.resolve.jvm.jvmSignature.JvmMethodParameterSignature
 import org.jetbrains.kotlin.utils.SmartSet
+import org.jetbrains.kotlin.utils.addToStdlib.cast
 import org.jetbrains.org.objectweb.asm.Opcodes
 import org.jetbrains.org.objectweb.asm.tree.*
 import org.jetbrains.org.objectweb.asm.tree.analysis.Frame
@@ -73,6 +75,20 @@ private fun MethodInliner.getLambdaIfExistsAndMarkInstructions(
                 //remove intermediate lambda astore, aload instruction: see 'complexStack/simple.1.kt' test
                 toDelete.add(storeIns)
                 toDelete.add(insnNode)
+                val aloads = insnList.asSequence().filter {
+                    it.opcode == Opcodes.ALOAD &&
+                            it.cast<VarInsnNode>().`var` == varIndex &&
+                            it != insnNode &&
+                            localFrame.getLocal(varIndex).singleOrNullInsn() == storeIns
+                }.toList()
+                val astores = insnList.asSequence().filter {
+                    it.opcode == Opcodes.ASTORE &&
+                            it.cast<VarInsnNode>().`var` == varIndex &&
+                            it != storeIns &&
+                            frames[insnList.indexOf(it)]?.top()?.singleOrNullInsn() in aloads
+                }.toList()
+                toDelete.addAll(aloads)
+                toDelete.addAll(astores)
                 return it
             }
         }

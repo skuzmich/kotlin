@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license
+ * Copyright 2010-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license
  * that can be found in the license/LICENSE.txt file.
  */
 
@@ -17,8 +17,10 @@ import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
 import org.jetbrains.kotlin.utils.addToStdlib.cast
 import org.jetbrains.kotlin.utils.sure
 import org.jetbrains.org.objectweb.asm.Opcodes
-import org.jetbrains.org.objectweb.asm.tree.MethodNode
+import org.jetbrains.org.objectweb.asm.Type
+import org.jetbrains.org.objectweb.asm.tree.FieldInsnNode
 import org.jetbrains.org.objectweb.asm.tree.MethodInsnNode
+import org.jetbrains.org.objectweb.asm.tree.MethodNode
 import org.jetbrains.org.objectweb.asm.tree.TypeInsnNode
 
 class CoroutineTransformer(
@@ -26,7 +28,8 @@ class CoroutineTransformer(
     private val classBuilder: ClassBuilder,
     private val sourceFile: String?,
     private val methods: List<MethodNode>,
-    private val superClassName: String
+    private val superClassName: String,
+    private val transformationInfo: AnonymousObjectTransformationInfo
 ) {
     private val state = inliningContext.state
 
@@ -35,7 +38,7 @@ class CoroutineTransformer(
         val crossinlineSuspend = crossinlineSuspend() ?: return false
         if (inliningContext.isInliningLambda && !inliningContext.isContinuation) return false
         return when {
-            isSuspendFunction(node) -> true
+            isSuspendFunction(node) -> !moreInlines()
             isSuspendLambda(node) -> {
                 if (isStateMachine(node)) return false
                 val functionDescriptor =
@@ -58,6 +61,30 @@ class CoroutineTransformer(
         node.instructions.asSequence().any { it.opcode == Opcodes.INVOKESTATIC && (it as MethodInsnNode).name == "getCOROUTINE_SUSPENDED" }
 
     private fun isSuspendLambda(node: MethodNode) = isResumeImpl(node)
+
+    // Check, that there will be further inlines.
+    // More specifically, if after inlining there still are crossinline lambdas to inline.
+    // The code in this case looks like
+    //   GETFIELD captured.this$0: lambda
+    //   GETFIELD lambda.$action: FunctionN
+    //   ALOAD
+    //   ....
+    //   INVOKEINTERFACE FunctionN.invoke
+    // The `captured` here shall be crossinline.
+    private fun moreInlines(): Boolean = transformationInfo.lambdasToInline.values.any { lambda ->
+        val node = lambda.node.node
+        val invokes = node.instructions.asSequence().filter { insn ->
+            insn is MethodInsnNode && isInvokeOnLambda(insn.owner, insn.name)
+        }.toList()
+        if (invokes.isEmpty()) return@any false
+        val sources = findSourceInstructions(classBuilder.thisName, node, invokes, ignoreCopy = true)
+        sources.values.flatten().any { insn ->
+            insn.opcode == Opcodes.GETFIELD && transformationInfo.allRecapturedParameters.any { param ->
+                param.type == Type.getObjectType(insn.cast<FieldInsnNode>().owner) &&
+                        transformationInfo.capturedLambdasToInline[Type.getObjectType(param.containingLambdaName).className]?.isCrossInline == true
+            }
+        }
+    }
 
     fun newMethod(node: MethodNode): DeferredMethodVisitor {
         val element = crossinlineSuspend()?.functionWithBodyOrCallableReference.sure {
