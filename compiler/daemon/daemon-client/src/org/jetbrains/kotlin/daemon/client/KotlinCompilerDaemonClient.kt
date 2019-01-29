@@ -81,7 +81,7 @@ interface KotlinCompilerDaemonClient {
 object KotlinCompilerClientInstance {
 
     const val RMI_FLAG = "-old"
-    const val SOCKETS_FLAG = "-new"
+    const val SOCKETS_FLAG = "-new_with_sockets"
 
     @JvmStatic
     fun main(vararg args: String) {

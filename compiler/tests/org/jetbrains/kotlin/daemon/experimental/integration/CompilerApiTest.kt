@@ -34,7 +34,7 @@ private val logFiles = arrayListOf<String>()
 class CompilerApiTest : KotlinIntegrationTestBase() {
 
     val kotlinCompilerClient = KotlinCompilerDaemonClient
-        .instantiate(Version.SOCKETS)
+        .instantiate(Version.RMI) // TODO(SOCKETS)
 
     private val compilerLibDir = getCompilerLib()
 
