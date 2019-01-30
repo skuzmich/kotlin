@@ -4069,9 +4069,21 @@ public final class kotlin/ranges/ULongRange$Companion {
 
 public final class kotlin/ranges/URangesKt {
 	public static final fun downTo-5PvTz6A (SS)Lkotlin/ranges/UIntProgression;
+	public static final fun downTo-6164-L4 (IS)Lkotlin/ranges/UIntProgression;
+	public static final fun downTo-6tIqiL0 (SJ)Lkotlin/ranges/ULongProgression;
+	public static final fun downTo-8XGo8SY (SI)Lkotlin/ranges/UIntProgression;
+	public static final fun downTo-FslKvyM (JB)Lkotlin/ranges/ULongProgression;
 	public static final fun downTo-J1ME1BU (II)Lkotlin/ranges/UIntProgression;
 	public static final fun downTo-Kr8caGY (BB)Lkotlin/ranges/UIntProgression;
+	public static final fun downTo-OF4Uv7A (IB)Lkotlin/ranges/UIntProgression;
+	public static final fun downTo-S1wOOCM (JS)Lkotlin/ranges/ULongProgression;
+	public static final fun downTo-T15XnHY (JI)Lkotlin/ranges/ULongProgression;
+	public static final fun downTo-Y9_jdV8 (IJ)Lkotlin/ranges/ULongProgression;
+	public static final fun downTo-Zmys4mY (SB)Lkotlin/ranges/UIntProgression;
 	public static final fun downTo-eb3DHEI (JJ)Lkotlin/ranges/ULongProgression;
+	public static final fun downTo-m9GcM9g (BS)Lkotlin/ranges/UIntProgression;
+	public static final fun downTo-p9Ya-mQ (BJ)Lkotlin/ranges/ULongProgression;
+	public static final fun downTo-vp-LjWY (BI)Lkotlin/ranges/UIntProgression;
 	public static final fun random (Lkotlin/ranges/UIntRange;Lkotlin/random/Random;)I
 	public static final fun random (Lkotlin/ranges/ULongRange;Lkotlin/random/Random;)J
 	public static final fun reversed (Lkotlin/ranges/UIntProgression;)Lkotlin/ranges/UIntProgression;
@@ -4079,9 +4091,21 @@ public final class kotlin/ranges/URangesKt {
 	public static final fun step (Lkotlin/ranges/UIntProgression;I)Lkotlin/ranges/UIntProgression;
 	public static final fun step (Lkotlin/ranges/ULongProgression;J)Lkotlin/ranges/ULongProgression;
 	public static final fun until-5PvTz6A (SS)Lkotlin/ranges/UIntRange;
+	public static final fun until-6164-L4 (IS)Lkotlin/ranges/UIntRange;
+	public static final fun until-6tIqiL0 (SJ)Lkotlin/ranges/ULongRange;
+	public static final fun until-8XGo8SY (SI)Lkotlin/ranges/UIntRange;
+	public static final fun until-FslKvyM (JB)Lkotlin/ranges/ULongRange;
 	public static final fun until-J1ME1BU (II)Lkotlin/ranges/UIntRange;
 	public static final fun until-Kr8caGY (BB)Lkotlin/ranges/UIntRange;
+	public static final fun until-OF4Uv7A (IB)Lkotlin/ranges/UIntRange;
+	public static final fun until-S1wOOCM (JS)Lkotlin/ranges/ULongRange;
+	public static final fun until-T15XnHY (JI)Lkotlin/ranges/ULongRange;
+	public static final fun until-Y9_jdV8 (IJ)Lkotlin/ranges/ULongRange;
+	public static final fun until-Zmys4mY (SB)Lkotlin/ranges/UIntRange;
 	public static final fun until-eb3DHEI (JJ)Lkotlin/ranges/ULongRange;
+	public static final fun until-m9GcM9g (BS)Lkotlin/ranges/UIntRange;
+	public static final fun until-p9Ya-mQ (BJ)Lkotlin/ranges/ULongRange;
+	public static final fun until-vp-LjWY (BI)Lkotlin/ranges/UIntRange;
 }
 
 public abstract interface class kotlin/reflect/KAnnotatedElement {

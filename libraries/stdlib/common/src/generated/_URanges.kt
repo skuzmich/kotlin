@@ -94,6 +94,150 @@ public inline operator fun ULongRange.contains(element: ULong?): Boolean {
 }
 
 /**
+ * Checks if the specified [value] belongs to this range.
+ */
+@kotlin.jvm.JvmName("uintRangeContains")
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public operator fun ClosedRange<UInt>.contains(value: UByte): Boolean {
+    return contains(value.toUInt())
+}
+
+/**
+ * Checks if the specified [value] belongs to this range.
+ */
+@kotlin.jvm.JvmName("ulongRangeContains")
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public operator fun ClosedRange<ULong>.contains(value: UByte): Boolean {
+    return contains(value.toULong())
+}
+
+/**
+ * Checks if the specified [value] belongs to this range.
+ */
+@kotlin.jvm.JvmName("ushortRangeContains")
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public operator fun ClosedRange<UShort>.contains(value: UByte): Boolean {
+    return contains(value.toUShort())
+}
+
+/**
+ * Checks if the specified [value] belongs to this range.
+ */
+@kotlin.jvm.JvmName("ulongRangeContains")
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public operator fun ClosedRange<ULong>.contains(value: UInt): Boolean {
+    return contains(value.toULong())
+}
+
+/**
+ * Checks if the specified [value] belongs to this range.
+ */
+@kotlin.jvm.JvmName("ubyteRangeContains")
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public operator fun ClosedRange<UByte>.contains(value: UInt): Boolean {
+    return value.toUByteExactOrNull().let { if (it != null) contains(it) else false }
+}
+
+/**
+ * Checks if the specified [value] belongs to this range.
+ */
+@kotlin.jvm.JvmName("ushortRangeContains")
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public operator fun ClosedRange<UShort>.contains(value: UInt): Boolean {
+    return value.toUShortExactOrNull().let { if (it != null) contains(it) else false }
+}
+
+/**
+ * Checks if the specified [value] belongs to this range.
+ */
+@kotlin.jvm.JvmName("uintRangeContains")
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public operator fun ClosedRange<UInt>.contains(value: ULong): Boolean {
+    return value.toUIntExactOrNull().let { if (it != null) contains(it) else false }
+}
+
+/**
+ * Checks if the specified [value] belongs to this range.
+ */
+@kotlin.jvm.JvmName("ubyteRangeContains")
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public operator fun ClosedRange<UByte>.contains(value: ULong): Boolean {
+    return value.toUByteExactOrNull().let { if (it != null) contains(it) else false }
+}
+
+/**
+ * Checks if the specified [value] belongs to this range.
+ */
+@kotlin.jvm.JvmName("ushortRangeContains")
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public operator fun ClosedRange<UShort>.contains(value: ULong): Boolean {
+    return value.toUShortExactOrNull().let { if (it != null) contains(it) else false }
+}
+
+/**
+ * Checks if the specified [value] belongs to this range.
+ */
+@kotlin.jvm.JvmName("uintRangeContains")
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public operator fun ClosedRange<UInt>.contains(value: UShort): Boolean {
+    return contains(value.toUInt())
+}
+
+/**
+ * Checks if the specified [value] belongs to this range.
+ */
+@kotlin.jvm.JvmName("ulongRangeContains")
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public operator fun ClosedRange<ULong>.contains(value: UShort): Boolean {
+    return contains(value.toULong())
+}
+
+/**
+ * Checks if the specified [value] belongs to this range.
+ */
+@kotlin.jvm.JvmName("ubyteRangeContains")
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public operator fun ClosedRange<UByte>.contains(value: UShort): Boolean {
+    return value.toUByteExactOrNull().let { if (it != null) contains(it) else false }
+}
+
+/**
+ * Returns a progression from this value down to the specified [to] value with the step -1.
+ * 
+ * The [to] value should be less than or equal to `this` value.
+ * If the [to] value is greater than `this` value the returned progression is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UInt.downTo(to: UByte): UIntProgression {
+    return UIntProgression.fromClosedRange(this, to.toUInt(), -1)
+}
+
+/**
+ * Returns a progression from this value down to the specified [to] value with the step -1.
+ * 
+ * The [to] value should be less than or equal to `this` value.
+ * If the [to] value is greater than `this` value the returned progression is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun ULong.downTo(to: UByte): ULongProgression {
+    return ULongProgression.fromClosedRange(this, to.toULong(), -1L)
+}
+
+/**
  * Returns a progression from this value down to the specified [to] value with the step -1.
  * 
  * The [to] value should be less than or equal to `this` value.
@@ -102,6 +246,18 @@ public inline operator fun ULongRange.contains(element: ULong?): Boolean {
 @SinceKotlin("1.3")
 @ExperimentalUnsignedTypes
 public infix fun UByte.downTo(to: UByte): UIntProgression {
+    return UIntProgression.fromClosedRange(this.toUInt(), to.toUInt(), -1)
+}
+
+/**
+ * Returns a progression from this value down to the specified [to] value with the step -1.
+ * 
+ * The [to] value should be less than or equal to `this` value.
+ * If the [to] value is greater than `this` value the returned progression is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UShort.downTo(to: UByte): UIntProgression {
     return UIntProgression.fromClosedRange(this.toUInt(), to.toUInt(), -1)
 }
 
@@ -125,8 +281,116 @@ public infix fun UInt.downTo(to: UInt): UIntProgression {
  */
 @SinceKotlin("1.3")
 @ExperimentalUnsignedTypes
+public infix fun ULong.downTo(to: UInt): ULongProgression {
+    return ULongProgression.fromClosedRange(this, to.toULong(), -1L)
+}
+
+/**
+ * Returns a progression from this value down to the specified [to] value with the step -1.
+ * 
+ * The [to] value should be less than or equal to `this` value.
+ * If the [to] value is greater than `this` value the returned progression is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UByte.downTo(to: UInt): UIntProgression {
+    return UIntProgression.fromClosedRange(this.toUInt(), to, -1)
+}
+
+/**
+ * Returns a progression from this value down to the specified [to] value with the step -1.
+ * 
+ * The [to] value should be less than or equal to `this` value.
+ * If the [to] value is greater than `this` value the returned progression is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UShort.downTo(to: UInt): UIntProgression {
+    return UIntProgression.fromClosedRange(this.toUInt(), to, -1)
+}
+
+/**
+ * Returns a progression from this value down to the specified [to] value with the step -1.
+ * 
+ * The [to] value should be less than or equal to `this` value.
+ * If the [to] value is greater than `this` value the returned progression is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UInt.downTo(to: ULong): ULongProgression {
+    return ULongProgression.fromClosedRange(this.toULong(), to, -1L)
+}
+
+/**
+ * Returns a progression from this value down to the specified [to] value with the step -1.
+ * 
+ * The [to] value should be less than or equal to `this` value.
+ * If the [to] value is greater than `this` value the returned progression is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
 public infix fun ULong.downTo(to: ULong): ULongProgression {
     return ULongProgression.fromClosedRange(this, to, -1L)
+}
+
+/**
+ * Returns a progression from this value down to the specified [to] value with the step -1.
+ * 
+ * The [to] value should be less than or equal to `this` value.
+ * If the [to] value is greater than `this` value the returned progression is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UByte.downTo(to: ULong): ULongProgression {
+    return ULongProgression.fromClosedRange(this.toULong(), to, -1L)
+}
+
+/**
+ * Returns a progression from this value down to the specified [to] value with the step -1.
+ * 
+ * The [to] value should be less than or equal to `this` value.
+ * If the [to] value is greater than `this` value the returned progression is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UShort.downTo(to: ULong): ULongProgression {
+    return ULongProgression.fromClosedRange(this.toULong(), to, -1L)
+}
+
+/**
+ * Returns a progression from this value down to the specified [to] value with the step -1.
+ * 
+ * The [to] value should be less than or equal to `this` value.
+ * If the [to] value is greater than `this` value the returned progression is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UInt.downTo(to: UShort): UIntProgression {
+    return UIntProgression.fromClosedRange(this, to.toUInt(), -1)
+}
+
+/**
+ * Returns a progression from this value down to the specified [to] value with the step -1.
+ * 
+ * The [to] value should be less than or equal to `this` value.
+ * If the [to] value is greater than `this` value the returned progression is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun ULong.downTo(to: UShort): ULongProgression {
+    return ULongProgression.fromClosedRange(this, to.toULong(), -1L)
+}
+
+/**
+ * Returns a progression from this value down to the specified [to] value with the step -1.
+ * 
+ * The [to] value should be less than or equal to `this` value.
+ * If the [to] value is greater than `this` value the returned progression is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UByte.downTo(to: UShort): UIntProgression {
+    return UIntProgression.fromClosedRange(this.toUInt(), to.toUInt(), -1)
 }
 
 /**
@@ -179,6 +443,64 @@ public infix fun ULongProgression.step(step: Long): ULongProgression {
     return ULongProgression.fromClosedRange(first, last, if (this.step > 0) step else -step)
 }
 
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+internal fun UInt.toUByteExactOrNull(): UByte? {
+    return if (this in UByte.MIN_VALUE.toUInt()..UByte.MAX_VALUE.toUInt()) this.toUByte() else null
+}
+
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+internal fun ULong.toUByteExactOrNull(): UByte? {
+    return if (this in UByte.MIN_VALUE.toULong()..UByte.MAX_VALUE.toULong()) this.toUByte() else null
+}
+
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+internal fun UShort.toUByteExactOrNull(): UByte? {
+    return if (this in UByte.MIN_VALUE.toUShort()..UByte.MAX_VALUE.toUShort()) this.toUByte() else null
+}
+
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+internal fun ULong.toUIntExactOrNull(): UInt? {
+    return if (this in UInt.MIN_VALUE.toULong()..UInt.MAX_VALUE.toULong()) this.toUInt() else null
+}
+
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+internal fun UInt.toUShortExactOrNull(): UShort? {
+    return if (this in UShort.MIN_VALUE.toUInt()..UShort.MAX_VALUE.toUInt()) this.toUShort() else null
+}
+
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+internal fun ULong.toUShortExactOrNull(): UShort? {
+    return if (this in UShort.MIN_VALUE.toULong()..UShort.MAX_VALUE.toULong()) this.toUShort() else null
+}
+
+/**
+ * Returns a range from this value up to but excluding the specified [to] value.
+ * 
+ * If the [to] value is less than or equal to `this` value, then the returned range is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UInt.until(to: UByte): UIntRange {
+    return this .. (to.toUInt() - 1u).toUInt()
+}
+
+/**
+ * Returns a range from this value up to but excluding the specified [to] value.
+ * 
+ * If the [to] value is less than or equal to `this` value, then the returned range is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun ULong.until(to: UByte): ULongRange {
+    return this .. (to.toULong() - 1u).toULong()
+}
+
 /**
  * Returns a range from this value up to but excluding the specified [to] value.
  * 
@@ -187,6 +509,17 @@ public infix fun ULongProgression.step(step: Long): ULongProgression {
 @SinceKotlin("1.3")
 @ExperimentalUnsignedTypes
 public infix fun UByte.until(to: UByte): UIntRange {
+    return this.toUInt() .. (to.toUInt() - 1u).toUInt()
+}
+
+/**
+ * Returns a range from this value up to but excluding the specified [to] value.
+ * 
+ * If the [to] value is less than or equal to `this` value, then the returned range is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UShort.until(to: UByte): UIntRange {
     return this.toUInt() .. (to.toUInt() - 1u).toUInt()
 }
 
@@ -209,9 +542,113 @@ public infix fun UInt.until(to: UInt): UIntRange {
  */
 @SinceKotlin("1.3")
 @ExperimentalUnsignedTypes
+public infix fun ULong.until(to: UInt): ULongRange {
+    return this .. (to.toULong() - 1u).toULong()
+}
+
+/**
+ * Returns a range from this value up to but excluding the specified [to] value.
+ * 
+ * If the [to] value is less than or equal to `this` value, then the returned range is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UByte.until(to: UInt): UIntRange {
+    if (to <= UInt.MIN_VALUE) return UIntRange.EMPTY
+    return this.toUInt() .. (to - 1u).toUInt()
+}
+
+/**
+ * Returns a range from this value up to but excluding the specified [to] value.
+ * 
+ * If the [to] value is less than or equal to `this` value, then the returned range is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UShort.until(to: UInt): UIntRange {
+    if (to <= UInt.MIN_VALUE) return UIntRange.EMPTY
+    return this.toUInt() .. (to - 1u).toUInt()
+}
+
+/**
+ * Returns a range from this value up to but excluding the specified [to] value.
+ * 
+ * If the [to] value is less than or equal to `this` value, then the returned range is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UInt.until(to: ULong): ULongRange {
+    if (to <= ULong.MIN_VALUE) return ULongRange.EMPTY
+    return this.toULong() .. (to - 1u).toULong()
+}
+
+/**
+ * Returns a range from this value up to but excluding the specified [to] value.
+ * 
+ * If the [to] value is less than or equal to `this` value, then the returned range is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
 public infix fun ULong.until(to: ULong): ULongRange {
     if (to <= ULong.MIN_VALUE) return ULongRange.EMPTY
     return this .. (to - 1u).toULong()
+}
+
+/**
+ * Returns a range from this value up to but excluding the specified [to] value.
+ * 
+ * If the [to] value is less than or equal to `this` value, then the returned range is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UByte.until(to: ULong): ULongRange {
+    if (to <= ULong.MIN_VALUE) return ULongRange.EMPTY
+    return this.toULong() .. (to - 1u).toULong()
+}
+
+/**
+ * Returns a range from this value up to but excluding the specified [to] value.
+ * 
+ * If the [to] value is less than or equal to `this` value, then the returned range is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UShort.until(to: ULong): ULongRange {
+    if (to <= ULong.MIN_VALUE) return ULongRange.EMPTY
+    return this.toULong() .. (to - 1u).toULong()
+}
+
+/**
+ * Returns a range from this value up to but excluding the specified [to] value.
+ * 
+ * If the [to] value is less than or equal to `this` value, then the returned range is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UInt.until(to: UShort): UIntRange {
+    return this .. (to.toUInt() - 1u).toUInt()
+}
+
+/**
+ * Returns a range from this value up to but excluding the specified [to] value.
+ * 
+ * If the [to] value is less than or equal to `this` value, then the returned range is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun ULong.until(to: UShort): ULongRange {
+    return this .. (to.toULong() - 1u).toULong()
+}
+
+/**
+ * Returns a range from this value up to but excluding the specified [to] value.
+ * 
+ * If the [to] value is less than or equal to `this` value, then the returned range is empty.
+ */
+@SinceKotlin("1.3")
+@ExperimentalUnsignedTypes
+public infix fun UByte.until(to: UShort): UIntRange {
+    return this.toUInt() .. (to.toUInt() - 1u).toUInt()
 }
 
 /**

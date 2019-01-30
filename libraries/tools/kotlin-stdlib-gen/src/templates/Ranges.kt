@@ -26,7 +26,7 @@ object RangeOps : TemplateGroupBase() {
     private val numericPermutations = numericPrimitives.permutations()
     private val primitivePermutations = numericPermutations + (PrimitiveType.Char to PrimitiveType.Char)
     private val integralPermutations = primitivePermutations.filter { it.first.isIntegral() && it.second.isIntegral() }
-    private val unsignedPermutations = PrimitiveType.unsignedPrimitives.map { it to it }
+    private val unsignedPermutations = PrimitiveType.unsignedPrimitives.permutations()
 
     val PrimitiveType.stepType get() = when(this) {
         PrimitiveType.Char -> "Int"
@@ -148,21 +148,25 @@ object RangeOps : TemplateGroupBase() {
     }
 
     val f_contains = fn("contains(value: Primitive)").byTwoPrimitives {
-        include(Ranges, numericPermutations)
+        include(Ranges, numericPermutations + unsignedPermutations)
         filter { _, (rangeType, itemType) -> rangeType != itemType }
     } builderWith { (rangeType, itemType) ->
         operator()
         signature("contains(value: $itemType)")
 
         check(rangeType.isNumeric() == itemType.isNumeric()) { "Required rangeType and itemType both to be numeric or both not, got: $rangeType, $itemType" }
+        check(rangeType.isUnsigned() == itemType.isUnsigned()) { "Required rangeType and itemType both to be unsigned or both not, got: $rangeType, $itemType" }
         if (rangeType.isIntegral() != itemType.isIntegral()) {
             deprecate(Deprecation("This `contains` operation mixing integer and floating point arguments has ambiguous semantics and is going to be removed.", level = DeprecationLevel.WARNING))
         }
-        platformName("${rangeType.name.decapitalize()}RangeContains")
+        platformName("${rangeType.name.toLowerCase()}RangeContains")
         returns("Boolean")
         doc { "Checks if the specified [value] belongs to this range." }
         body {
-            if (rangeType.capacity > itemType.capacity || !rangeType.isIntegral())
+            if (rangeType.isIntegral() && rangeType.capacity > itemType.capacity ||
+                rangeType.isUnsigned() && rangeType.capacityUnsigned > itemType.capacityUnsigned ||
+                !rangeType.isIntegral() && !rangeType.isUnsigned()
+            )
                 "return contains(value.to$rangeType())"
             else
                 "return value.to${rangeType}ExactOrNull().let { if (it != null) contains(it) else false }"
@@ -189,10 +193,13 @@ object RangeOps : TemplateGroupBase() {
     }
 
     val f_toPrimitiveExactOrNull = fn("to{}ExactOrNull()").byTwoPrimitives {
-        include(Primitives, numericPermutations)
-        filter { _, (fromType, toType) -> fromType.capacity > toType.capacity && toType.isIntegral() }
+        include(Primitives, numericPermutations + unsignedPermutations)
+        filter { _, (fromType, toType) ->
+            toType.isIntegral() && fromType.capacity > toType.capacity ||
+                    toType.isUnsigned() && fromType.capacityUnsigned > toType.capacityUnsigned
+        }
     } builderWith { (fromType, toType) ->
-        check(toType.isIntegral())
+        check(toType.isIntegral() || toType.isUnsigned())
         visibility("internal")
 
         signature("to${toType}ExactOrNull()")

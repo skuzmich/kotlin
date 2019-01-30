@@ -54,6 +54,7 @@ enum class PrimitiveType {
     ULong;
 
     val capacity by lazy { descendingByDomainCapacity.indexOf(this).let { if (it < 0) it else descendingByDomainCapacity.size - it } }
+    val capacityUnsigned by lazy { descendingByDomainCapacityUnsigned.indexOf(this).let { if (it < 0) it else descendingByDomainCapacityUnsigned.size - it } }
 
     companion object {
         val unsignedPrimitives = setOf(UInt, ULong, UByte, UShort)
@@ -75,6 +76,7 @@ enum class PrimitiveType {
 fun PrimitiveType.isIntegral(): Boolean = this in PrimitiveType.integralPrimitives
 fun PrimitiveType.isNumeric(): Boolean = this in PrimitiveType.numericPrimitives
 fun PrimitiveType.isFloatingPoint(): Boolean = this in PrimitiveType.floatingPointPrimitives
+fun PrimitiveType.isUnsigned(): Boolean = this in PrimitiveType.unsignedPrimitives
 
 enum class Inline {
     No,
