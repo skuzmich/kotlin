@@ -35,7 +35,7 @@ import com.sun.jdi.Type as JdiType
 
 class VariableFinder private constructor(private val context: ExecutionContext, private val frameProxy: StackFrameProxyImpl) {
     companion object {
-        private const val USE_UNSAFE_FALLBACK = false
+        private const val USE_UNSAFE_FALLBACK = true
 
         val CONTINUATION_TYPE: AsmType = AsmType.getType(Continuation::class.java)
 
