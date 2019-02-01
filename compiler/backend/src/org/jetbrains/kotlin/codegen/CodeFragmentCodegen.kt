@@ -125,7 +125,7 @@ class CodeFragmentCodegen private constructor(
                     return super.generateExtensionReceiver(descriptor)
                 }
 
-                override fun visitNonIntrinsicSimpleNameExpression(
+                override fun generateNonIntrinsicSimpleNameExpression(
                     expression: KtSimpleNameExpression, receiver: StackValue,
                     descriptor: DeclarationDescriptor, resolvedCall: ResolvedCall<*>?, isSyntheticField: Boolean
                 ): StackValue {
@@ -133,7 +133,7 @@ class CodeFragmentCodegen private constructor(
                     if (resultingDescriptor != null) {
                         findCapturedValue(resultingDescriptor)?.let { return it }
                     }
-                    return super.visitNonIntrinsicSimpleNameExpression(expression, receiver, descriptor, resolvedCall, isSyntheticField)
+                    return super.generateNonIntrinsicSimpleNameExpression(expression, receiver, descriptor, resolvedCall, isSyntheticField)
                 }
 
                 override fun visitThisExpression(expression: KtThisExpression, receiver: StackValue?): StackValue {

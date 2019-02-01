@@ -8,7 +8,7 @@ package org.jetbrains.kotlin.idea.debugger.evaluate.compilation
 import com.intellij.debugger.SourcePosition
 import org.jetbrains.kotlin.idea.debugger.evaluate.classLoading.ClassToLoad
 
-class CompiledDataDescriptor(
+data class CompiledDataDescriptor(
     val classes: List<ClassToLoad>,
     val parameters: List<CodeFragmentParameter.Dumb>,
     val crossingBounds: Set<CodeFragmentParameter.Dumb>,

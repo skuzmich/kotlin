@@ -1760,10 +1760,10 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
         StackValue intrinsicResult = applyIntrinsic(descriptor, IntrinsicPropertyGetter.class, resolvedCall, receiver);
         if (intrinsicResult != null) return intrinsicResult;
 
-        return visitNonIntrinsicSimpleNameExpression(expression, receiver, descriptor, resolvedCall, isSyntheticField);
+        return generateNonIntrinsicSimpleNameExpression(expression, receiver, descriptor, resolvedCall, isSyntheticField);
     }
 
-    public StackValue visitNonIntrinsicSimpleNameExpression(
+    public StackValue generateNonIntrinsicSimpleNameExpression(
             @NotNull KtSimpleNameExpression expression,
             @NotNull StackValue receiver,
             @NotNull DeclarationDescriptor descriptor,
@@ -2142,11 +2142,13 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
             }
         }
         else {
-            if (JvmCodegenUtil.isDebuggerContext(context)) {
-                boolean backingFieldRequired = bindingContext.get(BACKING_FIELD_REQUIRED, propertyDescriptor) == Boolean.TRUE;
-                skipPropertyAccessors = forceField || (backingFieldRequired && Visibilities.isPrivate(propertyDescriptor.getVisibility()));
-            } else {
-                skipPropertyAccessors = forceField;
+            skipPropertyAccessors = forceField;
+
+            if (JvmCodegenUtil.isDebuggerContext(context)
+                && Visibilities.isPrivate(propertyDescriptor.getVisibility())
+                && bindingContext.get(BACKING_FIELD_REQUIRED, propertyDescriptor) == Boolean.TRUE
+            ) {
+                skipPropertyAccessors = true;
             }
 
             ownerDescriptor = isBackingFieldMovedFromCompanion ? containingDeclaration : propertyDescriptor;
