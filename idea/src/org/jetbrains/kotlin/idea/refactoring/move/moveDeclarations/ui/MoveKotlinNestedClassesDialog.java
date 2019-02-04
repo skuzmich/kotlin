@@ -43,13 +43,13 @@ import org.jetbrains.kotlin.asJava.LightClassUtilsKt;
 import org.jetbrains.kotlin.asJava.classes.KtLightClassForSourceDeclaration;
 import org.jetbrains.kotlin.idea.completion.CompletionUtilsKt;
 import org.jetbrains.kotlin.idea.core.completion.DeclarationLookupObject;
+import org.jetbrains.kotlin.idea.core.completion.PackageLookupObject;
 import org.jetbrains.kotlin.idea.projectView.KtClassOrObjectTreeNode;
 import org.jetbrains.kotlin.idea.refactoring.KotlinRefactoringUtilKt;
 import org.jetbrains.kotlin.idea.refactoring.memberInfo.KotlinMemberInfo;
 import org.jetbrains.kotlin.idea.refactoring.memberInfo.KotlinMemberSelectionPanel;
 import org.jetbrains.kotlin.idea.refactoring.memberInfo.KotlinMemberSelectionTable;
 import org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.*;
-import static org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.MoveKotlinDeclarationsProcessorKt.MoveSource;
 import org.jetbrains.kotlin.idea.refactoring.ui.KotlinTypeReferenceEditorComboWithBrowseButton;
 import org.jetbrains.kotlin.psi.*;
 
@@ -59,6 +59,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+
+import static org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.MoveKotlinDeclarationsProcessorKt.MoveSource;
 
 public class MoveKotlinNestedClassesDialog extends RefactoringDialog {
     private static final String RECENTS_KEY = MoveKotlinNestedClassesDialog.class.getName() + ".RECENTS_KEY";
@@ -168,8 +170,8 @@ public class MoveKotlinNestedClassesDialog extends RefactoringDialog {
                             Object lookupObject = lookupElement.getObject();
                             if (!(lookupObject instanceof DeclarationLookupObject)) return false;
                             PsiElement psiElement = ((DeclarationLookupObject) lookupObject).getPsiElement();
-                            if (!(psiElement instanceof KtClassOrObject)) return false;
-                            return KotlinRefactoringUtilKt.canRefactor(psiElement);
+                            if (lookupObject instanceof PackageLookupObject) return true;
+                            return (psiElement instanceof KtClassOrObject) && KotlinRefactoringUtilKt.canRefactor(psiElement);
                         }
                     }
             );
