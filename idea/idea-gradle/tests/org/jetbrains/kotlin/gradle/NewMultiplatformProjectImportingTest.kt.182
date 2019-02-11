@@ -6,13 +6,16 @@
 package org.jetbrains.kotlin.gradle
 
 import com.intellij.openapi.roots.*
+import junit.framework.TestCase
 import org.jetbrains.jps.model.java.JavaResourceRootType
 import org.jetbrains.jps.model.java.JavaSourceRootType
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.KotlinResourceRootType
 import org.jetbrains.kotlin.config.KotlinSourceRootType
 import org.jetbrains.kotlin.idea.codeInsight.gradle.ExternalSystemImportingTestCase
+import org.jetbrains.kotlin.idea.codeInsight.gradle.GradleImportingTestCase
 import org.jetbrains.kotlin.idea.codeInsight.gradle.MultiplePluginVersionGradleImportingTestCase
+import org.jetbrains.kotlin.idea.codeInsight.gradle.facetSettings
 import org.jetbrains.kotlin.platform.impl.CommonIdePlatformKind
 import org.jetbrains.kotlin.platform.impl.JsIdePlatformKind
 import org.jetbrains.kotlin.platform.impl.JvmIdePlatformKind
@@ -20,6 +23,7 @@ import org.jetbrains.kotlin.test.KotlinTestUtils
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.runners.Parameterized
 
 class NewMultiplatformProjectImportingTest : MultiplePluginVersionGradleImportingTestCase() {
     private fun kotlinVersion() = if (gradleKotlinPluginVersion == MINIMAL_SUPPORTED_VERSION) "1.3.10" else gradleKotlinPluginVersion
@@ -333,7 +337,7 @@ class NewMultiplatformProjectImportingTest : MultiplePluginVersionGradleImportin
                 sourceFolder("shared/src/androidTest/resources", JavaResourceRootType.TEST_RESOURCE)
             }
             var nativeVersion = when (gradleKotlinPluginVersion) {
-                MINIMAL_SUPPORTED_VERSION -> "1.0.2"
+                MINIMAL_SUPPORTED_VERSION -> "0.9.3"
                 else -> "1.1.1"
             }
             module("shared_iOSMain") {
@@ -481,45 +485,6 @@ class NewMultiplatformProjectImportingTest : MultiplePluginVersionGradleImportin
         }
     }
 
-    /**
-     * This test is inherited form testPlatformToCommonExpectedByInComposite and actually tests
-     * dependencies in multiplatform project included in composite build
-     */
-    @Test
-    fun testPlatformToCommonExpByInComposite() {
-        configureByFiles()
-        importProject(true)
-
-        checkProjectStructure(exhaustiveSourceSourceRootList = false) {
-            module("project")
-            module("project.commonMain")
-            module("project.commonTest") {
-                moduleDependency("project.commonMain", DependencyScope.TEST)
-            }
-            module("toInclude")
-            module("toInclude.commonMain")
-            module("toInclude.commonTest") {
-                moduleDependency("toInclude.commonMain", DependencyScope.TEST)
-            }
-            module("toInclude.jsMain") {
-                moduleDependency("toInclude.commonMain", DependencyScope.COMPILE)
-            }
-
-            module("toInclude.jsTest") {
-                moduleDependency("toInclude.commonMain", DependencyScope.TEST)
-                moduleDependency("toInclude.commonTest", DependencyScope.TEST)
-                moduleDependency("toInclude.jsMain", DependencyScope.TEST)
-            }
-            module("toInclude.jvmMain") {
-                moduleDependency("toInclude.commonMain", DependencyScope.COMPILE)
-            }
-            module("toInclude.jvmTest") {
-                moduleDependency("toInclude.commonMain", DependencyScope.TEST)
-                moduleDependency("toInclude.commonTest", DependencyScope.TEST)
-                moduleDependency("toInclude.jvmMain", DependencyScope.TEST)
-            }
-        }
-    }
 
     private fun checkProjectStructure(
         exhaustiveModuleList: Boolean = true,
@@ -534,16 +499,6 @@ class NewMultiplatformProjectImportingTest : MultiplePluginVersionGradleImportin
             exhaustiveSourceSourceRootList,
             exhaustiveDependencyList,
             body)
-    }
-
-    fun importProject(useQualifiedNames: Boolean) {
-        val isUseQualifiedModuleNames = currentExternalProjectSettings.isUseQualifiedModuleNames
-        currentExternalProjectSettings.isUseQualifiedModuleNames = useQualifiedNames
-        try {
-            importProject()
-        } finally {
-            currentExternalProjectSettings.isUseQualifiedModuleNames = isUseQualifiedModuleNames
-        }
     }
 
     override fun importProject() {
