@@ -185,7 +185,7 @@ internal fun checkRedeclarations(
     }
 }
 
-private fun LexicalScope.getRelevantDescriptors(
+fun LexicalScope.getRelevantDescriptors(
         declaration: PsiNamedElement,
         name: String
 ): Collection<DeclarationDescriptor> {
