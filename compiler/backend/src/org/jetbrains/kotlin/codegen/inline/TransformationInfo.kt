@@ -73,7 +73,8 @@ class AnonymousObjectTransformationInfo internal constructor(
     val constructorDesc: String?,
     private val isStaticOrigin: Boolean,
     parentNameGenerator: NameGenerator,
-    private val capturesAnonymousObjectThatMustBeRegenerated: Boolean = false
+    private val capturesAnonymousObjectThatMustBeRegenerated: Boolean = false,
+    private val isSuspendLambdaThatMustBeRegenerated: Boolean = false
 ) : TransformationInfo {
 
     override val nameGenerator by lazy {
@@ -99,7 +100,8 @@ class AnonymousObjectTransformationInfo internal constructor(
 
     override fun shouldRegenerate(sameModule: Boolean): Boolean =
         !alreadyRegenerated &&
-                (!lambdasToInline.isEmpty() || !sameModule || capturedOuterRegenerated || needReification || capturesAnonymousObjectThatMustBeRegenerated)
+                (!lambdasToInline.isEmpty() || !sameModule || capturedOuterRegenerated || needReification || capturesAnonymousObjectThatMustBeRegenerated ||
+                        isSuspendLambdaThatMustBeRegenerated)
 
     override fun canRemoveAfterTransformation(): Boolean {
         // Note: It is unsafe to remove anonymous class that is referenced by GETSTATIC within lambda

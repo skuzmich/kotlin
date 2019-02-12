@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
 import org.jetbrains.kotlin.utils.addToStdlib.cast
+import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 import org.jetbrains.kotlin.utils.sure
 import org.jetbrains.org.objectweb.asm.Opcodes
 import org.jetbrains.org.objectweb.asm.tree.MethodNode
@@ -32,14 +33,13 @@ class CoroutineTransformer(
 
     fun shouldTransform(node: MethodNode): Boolean {
         if (isContinuationNotLambda()) return false
-        val crossinlineSuspend = crossinlineSuspend() ?: return false
         if (inliningContext.isInliningLambda && !inliningContext.isContinuation) return false
         return when {
             isSuspendFunction(node) -> true
             isSuspendLambda(node) -> {
                 if (isStateMachine(node)) return false
                 val functionDescriptor =
-                    crossinlineSuspend.invokeMethodDescriptor.containingDeclaration as? FunctionDescriptor ?: return true
+                    crossinlineSuspend()?.invokeMethodDescriptor?.containingDeclaration as? FunctionDescriptor ?: return true
                 !functionDescriptor.isInline
             }
             else -> false
@@ -60,9 +60,11 @@ class CoroutineTransformer(
     private fun isSuspendLambda(node: MethodNode) = isResumeImpl(node)
 
     fun newMethod(node: MethodNode): DeferredMethodVisitor {
-        val element = crossinlineSuspend()?.functionWithBodyOrCallableReference.sure {
-            "crossinline lambda should have element"
-        }
+        // Find any element to report error about suspend call in monitor
+        val element = crossinlineSuspend()?.functionWithBodyOrCallableReference
+            ?: inliningContext.root.sourceCompilerForInline.callElement.safeAs<KtElement>().sure {
+                "crossinline lambda should have element"
+            }
         return when {
             isResumeImpl(node) -> {
                 assert(!isStateMachine(node)) {
