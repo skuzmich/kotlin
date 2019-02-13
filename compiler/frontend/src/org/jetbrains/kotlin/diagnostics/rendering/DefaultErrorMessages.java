@@ -863,8 +863,6 @@ public class DefaultErrorMessages {
         MAP.put(ANNOTATION_ARGUMENT_MUST_BE_KCLASS_LITERAL, "An annotation argument must be a class literal (T::class)");
         MAP.put(ANNOTATION_ARGUMENT_KCLASS_LITERAL_OF_TYPE_PARAMETER, "Type parameter in a class literal is not allowed in an annotation argument");
         MAP.put(ANNOTATION_ARGUMENT_KCLASS_LITERAL_OF_TYPE_PARAMETER_ERROR, "Type parameter in a class literal is deprecated in an annotation argument");
-        MAP.put(ANNOTATION_ARGUMENT_KCLASS_LITERAL_WITH_PROJECTION, "Type projections and nullable types are deprecated in annotation arguments");
-        MAP.put(ANNOTATION_ARGUMENT_KCLASS_LITERAL_WITH_PROJECTION_ERROR, "Type projections and nullable types are not allowed in annotation arguments");
         MAP.put(ANNOTATION_PARAMETER_DEFAULT_VALUE_MUST_BE_CONSTANT, "Default value of annotation parameter must be a compile-time constant");
 
         MAP.put(ANNOTATIONS_ON_BLOCK_LEVEL_EXPRESSION_ON_THE_SAME_LINE,

@@ -2966,11 +2966,6 @@ public class DiagnosticsTestGenerated extends AbstractDiagnosticsTest {
                 runTest("compiler/testData/diagnostics/tests/classLiteral/inAnnotationArguments.kt");
             }
 
-            @TestMetadata("inAnnotationArguments_noProjections.kt")
-            public void testInAnnotationArguments_noProjections() throws Exception {
-                runTest("compiler/testData/diagnostics/tests/classLiteral/inAnnotationArguments_noProjections.kt");
-            }
-
             @TestMetadata("inAnnotationArguments_noTypeParams.kt")
             public void testInAnnotationArguments_noTypeParams() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/classLiteral/inAnnotationArguments_noTypeParams.kt");

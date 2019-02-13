@@ -34,7 +34,6 @@ import org.jetbrains.kotlin.resolve.constants.*
 import org.jetbrains.kotlin.resolve.descriptorUtil.classId
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.TypeUtils
-import org.jetbrains.kotlin.types.Variance
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
 import org.jetbrains.kotlin.types.expressions.DoubleColonLHS
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
@@ -132,11 +131,10 @@ class ConstantExpressionEvaluator(
         val diagnosticFactory = when {
             DescriptorUtils.isEnumClass(descriptor) -> Errors.ANNOTATION_ARGUMENT_MUST_BE_ENUM_CONST
             descriptor is ClassDescriptor && KotlinBuiltIns.isKClass(descriptor) -> {
-                val type = expressionType.arguments.singleOrNull()?.type
-                when {
-                    isArrayWithProjectionsOrNullability(type) -> Errors.ANNOTATION_ARGUMENT_KCLASS_LITERAL_WITH_PROJECTION_ERROR
-                    isTypeParameterOrArrayOfTypeParameter(type) -> Errors.ANNOTATION_ARGUMENT_KCLASS_LITERAL_OF_TYPE_PARAMETER_ERROR
-                    else -> Errors.ANNOTATION_ARGUMENT_MUST_BE_KCLASS_LITERAL
+                if (isTypeParameterOrArrayOfTypeParameter(expressionType.arguments.singleOrNull()?.type)) {
+                    Errors.ANNOTATION_ARGUMENT_KCLASS_LITERAL_OF_TYPE_PARAMETER_ERROR
+                } else {
+                    Errors.ANNOTATION_ARGUMENT_MUST_BE_KCLASS_LITERAL
                 }
             }
             else -> Errors.ANNOTATION_ARGUMENT_MUST_BE_CONST
@@ -188,13 +186,8 @@ class ConstantExpressionEvaluator(
                     } else {
                         trace.report(Errors.ANNOTATION_ARGUMENT_MUST_BE_KCLASS_LITERAL.on(argumentExpression))
                     }
-                } else if (doubleColonLhs is DoubleColonLHS.Type) {
-                    when {
-                        isArrayWithProjectionsOrNullability(doubleColonLhs.type) ->
-                            trace.report(Errors.ANNOTATION_ARGUMENT_KCLASS_LITERAL_WITH_PROJECTION.on(argumentExpression))
-                        isTypeParameterOrArrayOfTypeParameter(doubleColonLhs.type) ->
-                            trace.report(Errors.ANNOTATION_ARGUMENT_KCLASS_LITERAL_OF_TYPE_PARAMETER.on(argumentExpression))
-                    }
+                } else if (doubleColonLhs is DoubleColonLHS.Type && isTypeParameterOrArrayOfTypeParameter(doubleColonLhs.type)) {
+                    trace.report(Errors.ANNOTATION_ARGUMENT_KCLASS_LITERAL_OF_TYPE_PARAMETER.on(argumentExpression))
                 }
             }
         }
@@ -348,17 +341,6 @@ class ConstantExpressionEvaluator(
                 type == null -> false
                 KotlinBuiltIns.isArray(type) -> isTypeParameterOrArrayOfTypeParameter(type.arguments.singleOrNull()?.type)
                 else -> type.constructor.declarationDescriptor is TypeParameterDescriptor
-            }
-
-        internal fun isArrayWithProjectionsOrNullability(type: KotlinType?): Boolean =
-            when {
-                type == null -> false
-                KotlinBuiltIns.isArray(type) -> type.arguments.singleOrNull()?.let { projection ->
-                    projection.projectionKind != Variance.INVARIANT ||
-                            projection.type.isMarkedNullable ||
-                            isArrayWithProjectionsOrNullability(projection.type)
-                } == true
-                else -> false
             }
     }
 }
@@ -929,11 +911,6 @@ private class ConstantExpressionEvaluatorVisitor(
         val type = kClassType.arguments.singleOrNull()?.type ?: return null
         if (languageVersionSettings.supportsFeature(LanguageFeature.ProhibitTypeParametersInClassLiteralsInAnnotationArguments) &&
             ConstantExpressionEvaluator.isTypeParameterOrArrayOfTypeParameter(type)
-        ) {
-            return null
-        }
-        if (languageVersionSettings.supportsFeature(LanguageFeature.ProhibitProjectionsAndNullabilityInArrayClassLiteralsInAnnotationArguments) &&
-            ConstantExpressionEvaluator.isArrayWithProjectionsOrNullability(type)
         ) {
             return null
         }

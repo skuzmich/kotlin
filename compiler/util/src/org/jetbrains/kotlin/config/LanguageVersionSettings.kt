@@ -97,7 +97,6 @@ enum class LanguageFeature(
     ProhibitTypeParametersForLocalVariables(KOTLIN_1_4, kind = BUG_FIX),
     ProhibitJvmOverloadsOnConstructorsOfAnnotationClasses(KOTLIN_1_4, kind = BUG_FIX),
     ProhibitTypeParametersInClassLiteralsInAnnotationArguments(KOTLIN_1_4, kind = BUG_FIX),
-    ProhibitProjectionsAndNullabilityInArrayClassLiteralsInAnnotationArguments(KOTLIN_1_4, kind = BUG_FIX),
 
     ProperVisibilityForCompanionObjectInstanceField(sinceVersion = null, kind = BUG_FIX),
     // Temporarily disabled, see KT-27084/KT-22379

@@ -1,4 +1,4 @@
-// !LANGUAGE: +ProhibitTypeParametersInClassLiteralsInAnnotationArguments +ProhibitProjectionsAndNullabilityInArrayClassLiteralsInAnnotationArguments
+// !LANGUAGE: +ProhibitTypeParametersInClassLiteralsInAnnotationArguments
 
 import kotlin.reflect.KClass
 
@@ -40,12 +40,3 @@ inline val <reified T> T.test9
         <!ANNOTATION_ARGUMENT_KCLASS_LITERAL_OF_TYPE_PARAMETER_ERROR!>Array<T>::class<!>,
         <!ANNOTATION_ARGUMENT_KCLASS_LITERAL_OF_TYPE_PARAMETER_ERROR!>Array<Array<Array<T>>>::class<!>
     )<!>) object {}
-
-@AnnArray(<!NON_CONST_VAL_USED_IN_CONSTANT_EXPRESSION!>arrayOf(
-    <!ANNOTATION_ARGUMENT_KCLASS_LITERAL_WITH_PROJECTION_ERROR!>Array<String?>::class<!>,
-    <!ANNOTATION_ARGUMENT_KCLASS_LITERAL_WITH_PROJECTION_ERROR!>Array<out Number>::class<!>,
-    <!ANNOTATION_ARGUMENT_KCLASS_LITERAL_WITH_PROJECTION_ERROR!>Array<in Array<String?>>::class<!>,
-    <!ANNOTATION_ARGUMENT_KCLASS_LITERAL_WITH_PROJECTION_ERROR!>Array<Array<Array<String>>?>::class<!>,
-    <!ANNOTATION_ARGUMENT_KCLASS_LITERAL_WITH_PROJECTION_ERROR!>Array<Array<Array<in String>>>::class<!>
-)<!>)
-fun test10() {}

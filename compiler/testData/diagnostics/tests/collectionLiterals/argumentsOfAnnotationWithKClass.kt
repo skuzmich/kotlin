@@ -15,7 +15,7 @@ fun test1() {}
 @Foo([Int::class, String::class])
 fun test2() {}
 
-@Foo([<!OI;ANNOTATION_ARGUMENT_KCLASS_LITERAL_WITH_PROJECTION, ARRAY_CLASS_LITERAL_REQUIRES_ARGUMENT!>Array::class<!>])
+@Foo([<!ARRAY_CLASS_LITERAL_REQUIRES_ARGUMENT!>Array::class<!>])
 fun test3() {}
 
 @Foo([<!CLASS_LITERAL_LHS_NOT_A_CLASS!>Gen<Int>::class<!>])
