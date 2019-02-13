@@ -40,3 +40,6 @@ inline val <reified T> T.test9
         <!ANNOTATION_ARGUMENT_KCLASS_LITERAL_OF_TYPE_PARAMETER_ERROR!>Array<T>::class<!>,
         <!ANNOTATION_ARGUMENT_KCLASS_LITERAL_OF_TYPE_PARAMETER_ERROR!>Array<Array<Array<T>>>::class<!>
     )<!>) object {}
+
+inline val <reified T> T.test10
+    get() = @AnnArray(<!NON_CONST_VAL_USED_IN_CONSTANT_EXPRESSION!>[<!ANNOTATION_ARGUMENT_KCLASS_LITERAL_OF_TYPE_PARAMETER_ERROR!>T::class<!>]<!>) object {}
