@@ -5,7 +5,9 @@
 
 package org.jetbrains.kotlin.idea.core.script.dependencies
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.runReadAction
+import com.intellij.openapi.progress.EmptyProgressIndicator
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.Task
 import com.intellij.openapi.progress.util.BackgroundTaskUtil
@@ -19,17 +21,20 @@ import org.jetbrains.kotlin.script.LegacyResolverWrapper
 import org.jetbrains.kotlin.script.asResolveFailure
 import org.jetbrains.kotlin.script.findScriptDefinition
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.locks.LockSupport
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.write
 import kotlin.script.experimental.dependencies.AsyncDependenciesResolver
 import kotlin.script.experimental.dependencies.DependenciesResolver
 
 class AsyncScriptDependenciesLoader internal constructor(project: Project) : ScriptDependenciesLoader(project) {
-    private val backgroundTaskLock = ReentrantReadWriteLock()
+    private val lock = ReentrantReadWriteLock()
+
+    private var notifyRootChange: Boolean = false
     private var backgroundTasksQueue: LoaderBackgroundTask? = null
 
     override fun loadDependencies(file: VirtualFile, scriptDef: KotlinScriptDefinition) {
-        backgroundTaskLock.write {
+        lock.write {
             if (backgroundTasksQueue == null) {
                 backgroundTasksQueue = LoaderBackgroundTask()
                 backgroundTasksQueue!!.addTask(file)
@@ -41,6 +46,32 @@ class AsyncScriptDependenciesLoader internal constructor(project: Project) : Scr
     }
 
     override fun shouldShowNotification(): Boolean = !KotlinScriptingSettings.getInstance(project).isAutoReloadEnabled
+
+    override fun notifyRootsChanged(): Boolean {
+        lock.write {
+            if (notifyRootChange) return false
+
+            if (backgroundTasksQueue == null) {
+                submitMakeRootsChange()
+                return true
+            }
+
+            notifyRootChange = true
+        }
+
+        ApplicationManager.getApplication().executeOnPooledThread {
+            while (backgroundTasksQueue != null) {
+                LockSupport.parkNanos(50000000)
+            }
+
+            lock.write {
+                notifyRootChange = false
+            }
+            submitMakeRootsChange()
+        }
+
+        return false
+    }
 
     private fun runDependenciesUpdate(file: VirtualFile) {
         val scriptDef = runReadAction { findScriptDefinition(file, project) } ?: return
@@ -94,7 +125,7 @@ class AsyncScriptDependenciesLoader internal constructor(project: Project) : Scr
         private fun loadDependencies(indicator: ProgressIndicator?) {
             while (true) {
                 if (indicator?.isCanceled == true || sequenceOfFiles.isEmpty()) {
-                    backgroundTaskLock.write {
+                    lock.write {
                         backgroundTasksQueue = null
                     }
                     return

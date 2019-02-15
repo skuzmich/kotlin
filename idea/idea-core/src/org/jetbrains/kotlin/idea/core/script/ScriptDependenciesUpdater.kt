@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.idea.core.script
 
 import com.intellij.openapi.application.Application
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.editor.event.DocumentEvent
 import com.intellij.openapi.editor.event.DocumentListener
@@ -26,10 +27,14 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent
 import com.intellij.openapi.fileEditor.FileEditorManagerListener
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.MessageType
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.wm.WindowManager
+import com.intellij.openapi.wm.ex.StatusBarEx
 import com.intellij.psi.PsiManager
 import com.intellij.util.Alarm
+import com.intellij.util.ui.UIUtil
 import org.jetbrains.annotations.TestOnly
 import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.idea.core.script.dependencies.AsyncScriptDependenciesLoader
@@ -68,6 +73,8 @@ class ScriptDependenciesUpdater(
 
         updateDependencies(file, scriptDef)
 
+        makeRootsChangeIfNeeded()
+
         return cache[file] ?: ScriptDependencies.Empty
     }
 
@@ -77,6 +84,20 @@ class ScriptDependenciesUpdater(
             else -> syncLoader
         }
         loader.updateDependencies(file, scriptDef)
+    }
+
+    private fun makeRootsChangeIfNeeded() {
+        if (fileAttributeLoader.notifyRootsChanged()) return
+        if (syncLoader.notifyRootsChanged()) return
+        if (asyncLoader.notifyRootsChanged()) return
+    }
+
+    private fun areDependenciesCached(file: VirtualFile): Boolean {
+        return cache[file] != null
+    }
+
+    private fun areDependenciesCached(files: List<VirtualFile>): Boolean {
+        return files.all { areDependenciesCached(it) }
     }
 
     private fun listenForChangesInScripts() {
