@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.idea.caches.project.NotUnderContentRootModuleInfo
 import org.jetbrains.kotlin.idea.caches.project.getModuleInfo
 import org.jetbrains.kotlin.idea.core.script.IdeScriptReportSink
 import org.jetbrains.kotlin.idea.core.script.ScriptDefinitionsManager
-import org.jetbrains.kotlin.idea.core.script.scriptDependencies
+import org.jetbrains.kotlin.idea.core.script.ScriptDependenciesUpdater
 import org.jetbrains.kotlin.idea.util.ProjectRootsUtil
 import org.jetbrains.kotlin.psi.KtCodeFragment
 import org.jetbrains.kotlin.psi.KtFile
@@ -65,7 +65,7 @@ object KotlinHighlightingUtil {
 
     @Suppress("DEPRECATION")
     private fun shouldHighlightScript(ktFile: KtFile): Boolean {
-        if (ktFile.virtualFile.scriptDependencies == null) return false
+        if (!ScriptDependenciesUpdater.areDependenciesCached(ktFile)) return false
         if (ktFile.virtualFile.getUserData(IdeScriptReportSink.Reports)?.any { it.severity == ScriptReport.Severity.FATAL } == true) {
             return false
         }

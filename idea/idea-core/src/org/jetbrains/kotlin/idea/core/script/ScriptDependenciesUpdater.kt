@@ -160,6 +160,31 @@ class ScriptDependenciesUpdater(
             }
         }, project.messageBus.connect())
     }
+
+    companion object {
+        @JvmStatic
+        fun getInstance(project: Project): ScriptDependenciesUpdater =
+            ServiceManager.getService(project, ScriptDependenciesUpdater::class.java)
+
+        fun areDependenciesCached(file: KtFile): Boolean {
+            return getInstance(file.project).areDependenciesCached(file.virtualFile)
+        }
+
+        fun showNotification(file: KtFile, message: String) {
+            UIUtil.invokeLaterIfNeeded {
+                val ideFrame = WindowManager.getInstance().getIdeFrame(getInstance(file.project).project)
+                if (ideFrame != null) {
+                    val statusBar = ideFrame.statusBar as StatusBarEx
+                    statusBar.notifyProgressByBalloon(
+                        MessageType.WARNING,
+                        message,
+                        null,
+                        null
+                    )
+                }
+            }
+        }
+    }
 }
 
 @set: TestOnly
