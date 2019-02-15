@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.idea.debugger.evaluate.getClassDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCodeFragment
+import org.jetbrains.kotlin.psi.externalDescriptors
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.Variance
 import org.jetbrains.org.objectweb.asm.Type as AsmType
@@ -54,7 +55,7 @@ class DebugLabelPropertyDescriptorProvider(
             override fun getMemberScope() = SimpleMemberScope(properties)
         }
 
-        codeFragment.putUserData(KtCodeFragment.EXTERNAL_DESCRIPTORS, packageFragment.properties)
+        codeFragment.externalDescriptors = packageFragment.properties
     }
 
     private fun createDebugLabelDescriptors(containingDeclaration: PackageFragmentDescriptor): List<PropertyDescriptor> {

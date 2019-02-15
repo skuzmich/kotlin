@@ -173,7 +173,7 @@ class CodeFragmentAnalyzer(
     private fun enrichScopeWithImports(scope: LexicalScope, codeFragment: KtCodeFragment): LexicalScope {
         val additionalImportingScopes = mutableListOf<ImportingScope>()
 
-        val externalDescriptors = codeFragment.getUserData(KtCodeFragment.EXTERNAL_DESCRIPTORS) ?: emptyList()
+        val externalDescriptors = codeFragment.externalDescriptors ?: emptyList()
         if (externalDescriptors.isNotEmpty()) {
             additionalImportingScopes += ExplicitImportsScope(externalDescriptors)
         }
