@@ -137,6 +137,8 @@ class AsyncScriptDependenciesLoader internal constructor(project: Project) : Scr
         }
 
         fun addTask(file: VirtualFile) {
+            if (sequenceOfFiles.contains(file)) return
+
             sequenceOfFiles.add(file)
 
             // If the queue is longer than 3, show progress and cancel button
