@@ -78,6 +78,22 @@ class ScriptDependenciesUpdater(
         return cache[file] ?: ScriptDependencies.Empty
     }
 
+    fun updateDependenciesIfNeeded(files: List<VirtualFile>): Boolean {
+        val definitionsManager = ScriptDefinitionsManager.getInstance(project)
+        if (definitionsManager.isReady() && areDependenciesCached(files)) {
+            return false
+        }
+
+        for (file in files) {
+            val scriptDef = findScriptDefinition(file, project) ?: continue
+            updateDependencies(file, scriptDef)
+        }
+
+        makeRootsChangeIfNeeded()
+
+        return true
+    }
+
     private fun updateDependencies(file: VirtualFile, scriptDef: KotlinScriptDefinition) {
         val loader = when (scriptDef.dependencyResolver) {
             is AsyncDependenciesResolver, is LegacyResolverWrapper -> asyncLoader
