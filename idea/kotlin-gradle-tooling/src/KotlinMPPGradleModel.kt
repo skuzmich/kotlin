@@ -9,6 +9,10 @@ import org.jetbrains.plugins.gradle.model.ExternalDependency
 import java.io.File
 import java.io.Serializable
 
+// These interfaces are used for data transfer from gradle daemon. The serialisation used
+// requires the following conditions to be met:
+// 1. all the objects should be represented using interfaces
+// 2. both interfaces and implemented classes should not implement methods (at least not idempotent or with arguments)
 typealias KotlinDependency = ExternalDependency
 
 interface KotlinModule : Serializable {
@@ -108,4 +112,16 @@ interface KotlinMPPGradleModel : Serializable {
     companion object {
         const val NO_KOTLIN_NATIVE_HOME = ""
     }
+}
+
+// As these interfaces should be data classes the extension functions are used
+fun KotlinModule.toSourceSet(mppModel: KotlinMPPGradleModel) = when (this) {
+    is KotlinSourceSet -> this
+    is KotlinCompilation -> mppModel.sourceSets[fullName()]
+    else -> null
+}
+
+fun KotlinModule.fullName(simpleName: String = name) = when (this) {
+    is KotlinCompilation -> compilationFullName(simpleName, target.disambiguationClassifier)
+    else -> simpleName
 }

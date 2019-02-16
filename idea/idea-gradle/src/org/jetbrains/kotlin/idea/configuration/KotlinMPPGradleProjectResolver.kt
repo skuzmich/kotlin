@@ -437,12 +437,6 @@ open class KotlinMPPGradleProjectResolver : AbstractProjectResolverExtension() {
             }
         }
 
-        private fun KotlinModule.toSourceSet(mppModel: KotlinMPPGradleModel) = when (this) {
-            is KotlinSourceSet -> this
-            is KotlinCompilation -> mppModel.sourceSets[fullName()]
-            else -> null
-        }
-
         private fun preprocessDependencies(dependencies: Collection<KotlinDependency>): List<ExternalDependency> {
             return dependencies
                 .groupBy { it.id }
@@ -678,10 +672,7 @@ open class KotlinMPPGradleProjectResolver : AbstractProjectResolverExtension() {
             return compilerArguments
         }
 
-        private fun KotlinModule.fullName(simpleName: String = name) = when (this) {
-            is KotlinCompilation -> compilationFullName(simpleName, target.disambiguationClassifier)
-            else -> simpleName
-        }
+
 
         private fun getKotlinModuleId(gradleModule: IdeaModule, kotlinModule: KotlinModule, resolverCtx: ProjectResolverContext) =
             getModuleId(resolverCtx, gradleModule) + ":" + kotlinModule.fullName()

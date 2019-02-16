@@ -7,7 +7,7 @@ package org.jetbrains.kotlin.gradle
 
 import java.io.File
 
-class KotlinSourceSetImpl(
+data class KotlinSourceSetImpl(
     override val name: String,
     override val languageSettings: KotlinLanguageSettings,
     override val sourceDirs: Set<File>,
