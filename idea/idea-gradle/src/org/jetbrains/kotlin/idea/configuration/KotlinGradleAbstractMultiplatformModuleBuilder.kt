@@ -32,6 +32,7 @@ abstract class KotlinGradleAbstractMultiplatformModuleBuilder(
     val mppInApplication: Boolean = false
 ) : GradleModuleBuilder() {
     var explicitPluginVersion: String? = null
+    val mppDirName = "main"
 
     override fun getNodeIcon(): Icon = KotlinIcons.MPP
 
@@ -44,7 +45,7 @@ abstract class KotlinGradleAbstractMultiplatformModuleBuilder(
     }
 
     private fun setupMppModule(module: Module, parentDir: VirtualFile): VirtualFile? {
-        val moduleDir = parentDir.createChildDirectory(this, "app")
+        val moduleDir = parentDir.createChildDirectory(this, mppDirName)
         val buildGradle = moduleDir.createChildData(null, "build.gradle")
         val builder = BuildScriptDataBuilder(buildGradle)
         builder.setupAdditionalDependenciesForApplication()
@@ -102,7 +103,7 @@ abstract class KotlinGradleAbstractMultiplatformModuleBuilder(
             VfsUtil.saveText(buildGradle, buildGradleText)
             if (mppInApplication) {
                 updateSettingsScript(module) {
-                    it.addIncludedModules(listOf(":app"))
+                    it.addIncludedModules(listOf(":${mppDirName}"))
                 }
             }
             createProjectSkeleton(rootDir)

@@ -16,7 +16,7 @@ class KotlinGradleMobileMultiplatformModuleBuilder :
     private val commonName: String = "common"
     private var jvmTargetName: String = "android"
     private var nativeTargetName: String = "ios"
-    private val androidAppName = "app"
+    private val androidAppName = mppDirName
 
     private val commonSourceName get() = "$commonName$productionSuffix"
     private val commonTestName get() = "$commonName$testSuffix"
