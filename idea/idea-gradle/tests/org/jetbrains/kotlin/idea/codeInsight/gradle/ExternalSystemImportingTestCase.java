@@ -82,7 +82,7 @@ public abstract class ExternalSystemImportingTestCase extends ExternalSystemTest
                 errMessage.append(String.format("[%s] type: %s <-\r\n", o, o.getClass().toString()));
                 o = referencingObjects.get(o);
             }
-            //TODO fail(errMessage.toString());
+            fail(errMessage.toString());
         }
     }
 
