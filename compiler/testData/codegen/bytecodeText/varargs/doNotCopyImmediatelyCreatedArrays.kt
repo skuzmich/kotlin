@@ -1,4 +1,3 @@
-// IGNORE_BACKEND: JVM_IR
 fun booleanVararg(vararg xs: Boolean) {}
 fun byteVararg(vararg xs: Byte) {}
 fun shortVararg(vararg xs: Short) {}
