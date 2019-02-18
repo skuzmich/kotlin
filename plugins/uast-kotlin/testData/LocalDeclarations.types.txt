@@ -33,7 +33,6 @@ UFile (package = ) [public final class LocalDeclarationsKt {...]
                     UBinaryExpression (operator = ==) [bar() == <init>()] : PsiType:boolean
                         UCallExpression (kind = UastCallKind(name='method_call'), argCount = 0)) [bar()] : PsiType:<ErrorType>
                             UIdentifier (Identifier (bar)) [UIdentifier (Identifier (bar))]
-                            USimpleNameReferenceExpression (identifier = bar) [bar] : PsiType:<ErrorType>
                         UCallExpression (kind = UastCallKind(name='constructor_call'), argCount = 0)) [<init>()] : PsiType:<ErrorType>
                             UIdentifier (Identifier (Local)) [UIdentifier (Identifier (Local))]
                             USimpleNameReferenceExpression (identifier = <init>) [<init>] : PsiType:<ErrorType>

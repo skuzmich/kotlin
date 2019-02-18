@@ -19,7 +19,6 @@ UFile (package = )
                 UBlockExpression
                     UCallExpression (kind = UastCallKind(name='method_call'), argCount = 2))
                         UIdentifier (Identifier (crashMe))
-                        USimpleNameReferenceExpression (identifier = crashMe)
                         UQualifiedReferenceExpression
                             UClassLiteralExpression
                             USimpleNameReferenceExpression (identifier = java)

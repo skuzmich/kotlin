@@ -64,6 +64,7 @@ class KotlinUFunctionCallExpression(
 
     override val classReference by lz {
         KotlinClassViaConstructorUSimpleReferenceExpression(psi, methodName.orAnonymous("class"), this)
+            .takeIf { it.resolve() != null }
     }
 
     override val methodIdentifier by lz {
@@ -197,7 +198,7 @@ class KotlinUFunctionCallExpression(
     override fun accept(visitor: UastVisitor) {
         if (visitor.visitCallExpression(this)) return
         methodIdentifier?.accept(visitor)
-        classReference.accept(visitor)
+        classReference?.accept(visitor) // TODO maybe avoid it? could be too expensive
         valueArguments.acceptList(visitor)
 
         visitor.afterVisitCallExpression(this)

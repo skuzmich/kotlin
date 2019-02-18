@@ -23,9 +23,6 @@ UFile (package = ) [public final class MyColor {...]
     <init>(18, 2, 3)
 })(Undetermined)
                 UIdentifier (Identifier (lazy)) [UIdentifier (Identifier (lazy))]
-                USimpleNameReferenceExpression (identifier = lazy) [lazy] = external lazy({
-    <init>(18, 2, 3)
-})(Undetermined)
                 ULambdaExpression [{ ...}] = Undetermined
                     UBlockExpression [{...}] = external <init>(18, 2, 3)(18, 2, 3)
                         UCallExpression (kind = UastCallKind(name='constructor_call'), argCount = 3)) [<init>(18, 2, 3)] = external <init>(18, 2, 3)(18, 2, 3)
@@ -40,9 +37,6 @@ UFile (package = ) [public final class MyColor {...]
     <init>(1, 2, 3)
 })(Undetermined)
                 UIdentifier (Identifier (lazy)) [UIdentifier (Identifier (lazy))]
-                USimpleNameReferenceExpression (identifier = lazy) [lazy] = external lazy({
-    <init>(1, 2, 3)
-})(Undetermined)
                 ULambdaExpression [{ ...}] = Undetermined
                     UBlockExpression [{...}] = external <init>(1, 2, 3)(1, 2, 3)
                         UCallExpression (kind = UastCallKind(name='constructor_call'), argCount = 3)) [<init>(1, 2, 3)] = external <init>(1, 2, 3)(1, 2, 3)
