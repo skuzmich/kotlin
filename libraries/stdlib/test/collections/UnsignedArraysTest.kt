@@ -6,6 +6,7 @@
 @file:Suppress("SIGNED_CONSTANT_CONVERTED_TO_UNSIGNED")
 package test.collections
 
+import test.collections.behaviors.listBehavior
 import kotlin.test.*
 
 fun assertArrayContentEquals(expected: UIntArray, actual: UIntArray, message: String = "")      { assertTrue(expected contentEquals actual, message) }
@@ -354,5 +355,19 @@ class UnsignedArraysTest {
         assertArrayContentEquals(ubyteArrayOf(3u, 2u, 1u), ubyteArrayOf(1u, 2u, 3u).reversedArray())
         assertArrayContentEquals(ushortArrayOf(3u, 2u, 1u), ushortArrayOf(1u, 2u, 3u).reversedArray())
         assertArrayContentEquals(ulongArrayOf(3u, 2u, 1u), ulongArrayOf(1u, 2u, 3u).reversedArray())
+    }
+
+    @Test
+    fun asList() {
+        compare(listOf<UByte>(), ubyteArrayOf().asList()) { listBehavior() }
+        compare(listOf<UShort>(1), ushortArrayOf(1.toUShort()).asList()) { listBehavior() }
+        compare(listOf<UInt>(1, 2), uintArrayOf(1u, 2u).asList()) { listBehavior() }
+        compare(listOf<UInt>(1, 2, 3), uintArrayOf(1u, 2u, 3u).asList()) { listBehavior() }
+
+        val ulongs = ulongArrayOf(1uL, 5uL, 7uL)
+        val ulongsAsList = ulongs.asList()
+        assertEquals(5uL, ulongsAsList[1])
+        ulongs[1] = 10
+        assertEquals(10uL, ulongsAsList[1], "Should reflect changes in original array")
     }
 }

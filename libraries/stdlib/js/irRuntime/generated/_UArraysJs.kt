@@ -17,9 +17,18 @@ import kotlin.js.*
  */
 @SinceKotlin("1.3")
 @ExperimentalUnsignedTypes
-@kotlin.internal.InlineOnly
-public actual inline fun UIntArray.asList(): List<UInt> {
-    return this.unsafeCast<Array<UInt>>().asList()
+public actual fun UIntArray.asList(): List<UInt> {
+    return object : AbstractList<UInt>(), RandomAccess {
+        override val size: Int get() = this@asList.size
+        override fun isEmpty(): Boolean = this@asList.isEmpty()
+        override fun contains(element: UInt): Boolean = this@asList.contains(element)
+        override fun get(index: Int): UInt {
+            AbstractList.checkElementIndex(index, size)
+            return this@asList[index]
+        }
+        override fun indexOf(element: UInt): Int = this@asList.indexOf(element)
+        override fun lastIndexOf(element: UInt): Int = this@asList.lastIndexOf(element)
+    }
 }
 
 /**
@@ -27,9 +36,18 @@ public actual inline fun UIntArray.asList(): List<UInt> {
  */
 @SinceKotlin("1.3")
 @ExperimentalUnsignedTypes
-@kotlin.internal.InlineOnly
-public actual inline fun ULongArray.asList(): List<ULong> {
-    return this.unsafeCast<Array<ULong>>().asList()
+public actual fun ULongArray.asList(): List<ULong> {
+    return object : AbstractList<ULong>(), RandomAccess {
+        override val size: Int get() = this@asList.size
+        override fun isEmpty(): Boolean = this@asList.isEmpty()
+        override fun contains(element: ULong): Boolean = this@asList.contains(element)
+        override fun get(index: Int): ULong {
+            AbstractList.checkElementIndex(index, size)
+            return this@asList[index]
+        }
+        override fun indexOf(element: ULong): Int = this@asList.indexOf(element)
+        override fun lastIndexOf(element: ULong): Int = this@asList.lastIndexOf(element)
+    }
 }
 
 /**
@@ -37,9 +55,18 @@ public actual inline fun ULongArray.asList(): List<ULong> {
  */
 @SinceKotlin("1.3")
 @ExperimentalUnsignedTypes
-@kotlin.internal.InlineOnly
-public actual inline fun UByteArray.asList(): List<UByte> {
-    return this.unsafeCast<Array<UByte>>().asList()
+public actual fun UByteArray.asList(): List<UByte> {
+    return object : AbstractList<UByte>(), RandomAccess {
+        override val size: Int get() = this@asList.size
+        override fun isEmpty(): Boolean = this@asList.isEmpty()
+        override fun contains(element: UByte): Boolean = this@asList.contains(element)
+        override fun get(index: Int): UByte {
+            AbstractList.checkElementIndex(index, size)
+            return this@asList[index]
+        }
+        override fun indexOf(element: UByte): Int = this@asList.indexOf(element)
+        override fun lastIndexOf(element: UByte): Int = this@asList.lastIndexOf(element)
+    }
 }
 
 /**
@@ -47,8 +74,17 @@ public actual inline fun UByteArray.asList(): List<UByte> {
  */
 @SinceKotlin("1.3")
 @ExperimentalUnsignedTypes
-@kotlin.internal.InlineOnly
-public actual inline fun UShortArray.asList(): List<UShort> {
-    return this.unsafeCast<Array<UShort>>().asList()
+public actual fun UShortArray.asList(): List<UShort> {
+    return object : AbstractList<UShort>(), RandomAccess {
+        override val size: Int get() = this@asList.size
+        override fun isEmpty(): Boolean = this@asList.isEmpty()
+        override fun contains(element: UShort): Boolean = this@asList.contains(element)
+        override fun get(index: Int): UShort {
+            AbstractList.checkElementIndex(index, size)
+            return this@asList[index]
+        }
+        override fun indexOf(element: UShort): Int = this@asList.indexOf(element)
+        override fun lastIndexOf(element: UShort): Int = this@asList.lastIndexOf(element)
+    }
 }
 

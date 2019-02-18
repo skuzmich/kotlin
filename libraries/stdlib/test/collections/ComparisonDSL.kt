@@ -6,6 +6,7 @@
 package test.collections
 
 import test.*
+import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.test.*
 
@@ -31,6 +32,10 @@ public class CompareContext<out T>(public val expected: T, public val actual: T)
         assertFailEquals({ expected.getter() }, { actual.getter() })
     }
 
+    public fun <E : Throwable> propertyFailsWith(e: KClass<E>, getter: T.() -> Unit) {
+        assertFailWith(e, { expected.getter() }, { actual.getter() })
+    }
+
     public fun <P> compareProperty(getter: T.() -> P, block: CompareContext<P>.() -> Unit) {
         compare(expected.getter(), actual.getter(), block)
     }
@@ -40,5 +45,10 @@ public class CompareContext<out T>(public val expected: T, public val actual: T)
         val actualFail = assertFails(actual)
         //assertEquals(expectedFail != null, actualFail != null)
         assertTypeEquals(expectedFail, actualFail)
+    }
+
+    private fun <E : Throwable> assertFailWith(e: KClass<E>, expected: () -> Unit, actual: () -> Unit) {
+        assertFailsWith(e, expected)
+        assertFailsWith(e, actual)
     }
 }

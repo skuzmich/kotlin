@@ -1121,8 +1121,22 @@ object ArrayOps : TemplateGroupBase() {
                 body { objectLiteralImpl }
             }
             on(Platform.JS) {
-                if (primitive == PrimitiveType.Char) {
-                    body { objectLiteralImpl }
+                if (primitive == PrimitiveType.Char || primitive in PrimitiveType.unsignedPrimitives) {
+                    body {
+                        """
+                        return object : AbstractList<T>(), RandomAccess {
+                            override val size: Int get() = this@asList.size
+                            override fun isEmpty(): Boolean = this@asList.isEmpty()
+                            override fun contains(element: T): Boolean = this@asList.contains(element)
+                            override fun get(index: Int): T {
+                                AbstractList.checkElementIndex(index, size)
+                                return this@asList[index]
+                            }
+                            override fun indexOf(element: T): Int = this@asList.indexOf(element)
+                            override fun lastIndexOf(element: T): Int = this@asList.lastIndexOf(element)
+                        }
+                        """
+                    }
                 }
                 else {
                     inlineOnly()
