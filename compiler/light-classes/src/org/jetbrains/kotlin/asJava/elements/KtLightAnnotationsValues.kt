@@ -67,7 +67,8 @@ class KtLightPsiClassObjectAccessExpression(override val kotlinOrigin: KtClassLi
     override fun getType(): PsiType {
         val bindingContext = LightClassGenerationSupport.getInstance(this.project).analyze(kotlinOrigin)
         val (classId, arrayDimensions) = bindingContext[BindingContext.COMPILE_TIME_VALUE, kotlinOrigin]
-            ?.toConstantValue(TypeUtils.NO_EXPECTED_TYPE)?.safeAs<KClassValue>()?.value ?: return PsiType.VOID
+            ?.toConstantValue(TypeUtils.NO_EXPECTED_TYPE)?.safeAs<KClassValue>()?.value
+            ?.safeAs<KClassValue.Value.NormalClass>()?.value ?: return PsiType.VOID
         var type = psiType(classId.asSingleFqName().asString(), kotlinOrigin, boxPrimitiveType = arrayDimensions > 0) ?: return PsiType.VOID
         repeat(arrayDimensions) {
             type = type.createArrayType()
