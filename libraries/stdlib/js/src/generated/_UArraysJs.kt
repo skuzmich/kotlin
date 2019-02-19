@@ -21,13 +21,22 @@ public actual fun UIntArray.asList(): List<UInt> {
     return object : AbstractList<UInt>(), RandomAccess {
         override val size: Int get() = this@asList.size
         override fun isEmpty(): Boolean = this@asList.isEmpty()
-        override fun contains(element: UInt): Boolean = this@asList.contains(element)
+        override fun contains(element: UInt): Boolean {
+            if ((element as Any?) !is UInt) return false
+            return this@asList.contains(element)
+        }
         override fun get(index: Int): UInt {
             AbstractList.checkElementIndex(index, size)
             return this@asList[index]
         }
-        override fun indexOf(element: UInt): Int = this@asList.indexOf(element)
-        override fun lastIndexOf(element: UInt): Int = this@asList.lastIndexOf(element)
+        override fun indexOf(element: UInt): Int {
+            if ((element as Any?) !is UInt) return -1
+            return this@asList.indexOf(element)
+        }
+        override fun lastIndexOf(element: UInt): Int {
+            if ((element as Any?) !is UInt) return -1
+            return this@asList.lastIndexOf(element)
+        }
     }
 }
 
@@ -40,13 +49,22 @@ public actual fun ULongArray.asList(): List<ULong> {
     return object : AbstractList<ULong>(), RandomAccess {
         override val size: Int get() = this@asList.size
         override fun isEmpty(): Boolean = this@asList.isEmpty()
-        override fun contains(element: ULong): Boolean = this@asList.contains(element)
+        override fun contains(element: ULong): Boolean {
+            if ((element as Any?) !is ULong) return false
+            return this@asList.contains(element)
+        }
         override fun get(index: Int): ULong {
             AbstractList.checkElementIndex(index, size)
             return this@asList[index]
         }
-        override fun indexOf(element: ULong): Int = this@asList.indexOf(element)
-        override fun lastIndexOf(element: ULong): Int = this@asList.lastIndexOf(element)
+        override fun indexOf(element: ULong): Int {
+            if ((element as Any?) !is ULong) return -1
+            return this@asList.indexOf(element)
+        }
+        override fun lastIndexOf(element: ULong): Int {
+            if ((element as Any?) !is ULong) return -1
+            return this@asList.lastIndexOf(element)
+        }
     }
 }
 
@@ -59,13 +77,22 @@ public actual fun UByteArray.asList(): List<UByte> {
     return object : AbstractList<UByte>(), RandomAccess {
         override val size: Int get() = this@asList.size
         override fun isEmpty(): Boolean = this@asList.isEmpty()
-        override fun contains(element: UByte): Boolean = this@asList.contains(element)
+        override fun contains(element: UByte): Boolean {
+            if ((element as Any?) !is UByte) return false
+            return this@asList.contains(element)
+        }
         override fun get(index: Int): UByte {
             AbstractList.checkElementIndex(index, size)
             return this@asList[index]
         }
-        override fun indexOf(element: UByte): Int = this@asList.indexOf(element)
-        override fun lastIndexOf(element: UByte): Int = this@asList.lastIndexOf(element)
+        override fun indexOf(element: UByte): Int {
+            if ((element as Any?) !is UByte) return -1
+            return this@asList.indexOf(element)
+        }
+        override fun lastIndexOf(element: UByte): Int {
+            if ((element as Any?) !is UByte) return -1
+            return this@asList.lastIndexOf(element)
+        }
     }
 }
 
@@ -78,13 +105,22 @@ public actual fun UShortArray.asList(): List<UShort> {
     return object : AbstractList<UShort>(), RandomAccess {
         override val size: Int get() = this@asList.size
         override fun isEmpty(): Boolean = this@asList.isEmpty()
-        override fun contains(element: UShort): Boolean = this@asList.contains(element)
+        override fun contains(element: UShort): Boolean {
+            if ((element as Any?) !is UShort) return false
+            return this@asList.contains(element)
+        }
         override fun get(index: Int): UShort {
             AbstractList.checkElementIndex(index, size)
             return this@asList[index]
         }
-        override fun indexOf(element: UShort): Int = this@asList.indexOf(element)
-        override fun lastIndexOf(element: UShort): Int = this@asList.lastIndexOf(element)
+        override fun indexOf(element: UShort): Int {
+            if ((element as Any?) !is UShort) return -1
+            return this@asList.indexOf(element)
+        }
+        override fun lastIndexOf(element: UShort): Int {
+            if ((element as Any?) !is UShort) return -1
+            return this@asList.lastIndexOf(element)
+        }
     }
 }
 

@@ -32,8 +32,8 @@ public class CompareContext<out T>(public val expected: T, public val actual: T)
         assertFailEquals({ expected.getter() }, { actual.getter() })
     }
 
-    public fun <E : Throwable> propertyFailsWith(e: KClass<E>, getter: T.() -> Unit) {
-        assertFailWith(e, { expected.getter() }, { actual.getter() })
+    public inline fun <reified E : Throwable> propertyFailsWith(crossinline getter: T.() -> Unit) {
+        assertFailWith(E::class, { expected.getter() }, { actual.getter() })
     }
 
     public fun <P> compareProperty(getter: T.() -> P, block: CompareContext<P>.() -> Unit) {
@@ -47,7 +47,8 @@ public class CompareContext<out T>(public val expected: T, public val actual: T)
         assertTypeEquals(expectedFail, actualFail)
     }
 
-    private fun <E : Throwable> assertFailWith(e: KClass<E>, expected: () -> Unit, actual: () -> Unit) {
+    @PublishedApi
+    internal fun <E : Throwable> assertFailWith(e: KClass<E>, expected: () -> Unit, actual: () -> Unit) {
         assertFailsWith(e, expected)
         assertFailsWith(e, actual)
     }

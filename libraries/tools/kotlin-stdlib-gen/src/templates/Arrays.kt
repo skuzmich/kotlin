@@ -1127,13 +1127,22 @@ object ArrayOps : TemplateGroupBase() {
                         return object : AbstractList<T>(), RandomAccess {
                             override val size: Int get() = this@asList.size
                             override fun isEmpty(): Boolean = this@asList.isEmpty()
-                            override fun contains(element: T): Boolean = this@asList.contains(element)
+                            override fun contains(element: T): Boolean {
+                                if ((element as Any?) !is T) return false
+                                return this@asList.contains(element)
+                            }
                             override fun get(index: Int): T {
                                 AbstractList.checkElementIndex(index, size)
                                 return this@asList[index]
                             }
-                            override fun indexOf(element: T): Int = this@asList.indexOf(element)
-                            override fun lastIndexOf(element: T): Int = this@asList.lastIndexOf(element)
+                            override fun indexOf(element: T): Int {
+                                if ((element as Any?) !is T) return -1
+                                return this@asList.indexOf(element)
+                            }
+                            override fun lastIndexOf(element: T): Int {
+                                if ((element as Any?) !is T) return -1
+                                return this@asList.lastIndexOf(element)
+                            }
                         }
                         """
                     }
