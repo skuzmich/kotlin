@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.fir.java
 
+import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.expressions.FirAnnotationCall
 import org.jetbrains.kotlin.fir.expressions.resolvedFqName
@@ -13,6 +14,7 @@ import org.jetbrains.kotlin.load.java.*
 import org.jetbrains.kotlin.load.java.typeEnhancement.NullabilityQualifier
 import org.jetbrains.kotlin.load.java.typeEnhancement.NullabilityQualifierWithMigrationStatus
 import org.jetbrains.kotlin.utils.Jsr305State
+import org.jetbrains.kotlin.utils.addToStdlib.firstNotNullResult
 
 class FirSignatureEnhancement(private val session: FirSession, private val jsr305State: Jsr305State) {
 
@@ -28,6 +30,17 @@ class FirSignatureEnhancement(private val session: FirSession, private val jsr30
             else -> null
         }
     }
+
+    fun List<FirAnnotationCall>.extractNullability(
+        annotationTypeQualifierResolver: FirAnnotationTypeQualifierResolver
+    ): NullabilityQualifierWithMigrationStatus? =
+        this.firstNotNullResult { annotationCall ->
+            this@FirSignatureEnhancement.extractNullability(
+                annotationTypeQualifierResolver,
+                annotationCall
+            )
+        }
+
 
     fun extractNullability(
         annotationTypeQualifierResolver: FirAnnotationTypeQualifierResolver,

@@ -5,13 +5,21 @@
 
 package org.jetbrains.kotlin.fir.java
 
+import org.jetbrains.kotlin.builtins.jvm.JavaToKotlinClassMap
+import org.jetbrains.kotlin.fir.expressions.FirAnnotationCall
+import org.jetbrains.kotlin.fir.expressions.FirAnnotationContainer
+import org.jetbrains.kotlin.fir.expressions.resolvedFqName
+import org.jetbrains.kotlin.fir.symbols.ConeClassLikeSymbol
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.fir.types.impl.FirResolvedTypeRefImpl
 import org.jetbrains.kotlin.load.java.AnnotationTypeQualifierResolver
+import org.jetbrains.kotlin.load.java.MUTABLE_ANNOTATIONS
+import org.jetbrains.kotlin.load.java.READ_ONLY_ANNOTATIONS
 import org.jetbrains.kotlin.load.java.structure.JavaType
-import org.jetbrains.kotlin.load.java.typeEnhancement.JavaTypeQualifiers
-import org.jetbrains.kotlin.load.java.typeEnhancement.TypeComponentPosition
-import org.jetbrains.kotlin.load.java.typeEnhancement.shouldEnhance
+import org.jetbrains.kotlin.load.java.typeEnhancement.*
+import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.FqNameUnsafe
+import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 
 private data class TypeAndDefaultQualifiers(
     val type: FirResolvedTypeRef,
@@ -54,9 +62,174 @@ private fun FirResolvedTypeRef.toIndexed(
     return list
 }
 
+private fun ConeKotlinType.toFqNameUnsafe(): FqNameUnsafe? =
+    ((this as? ConeSymbolBasedType)?.symbol as? ConeClassLikeSymbol)?.classId?.asSingleFqName()?.toUnsafe()
 
-internal fun FirResolvedTypeRef.computeIndexedQualifiers(): (Int) -> JavaTypeQualifiers {
-    return { JavaTypeQualifiers.NONE }
+private fun FirResolvedTypeRef.extractQualifiers(): JavaTypeQualifiers {
+    val type = type
+    val (lower, upper) =
+        if (type is ConeFlexibleType) {
+            Pair(type.lowerBound, type.upperBound)
+        } else {
+            Pair(type, type)
+        }
+
+    val mapping = JavaToKotlinClassMap
+    return JavaTypeQualifiers(
+        when {
+            lower.isMarkedNullable -> NullabilityQualifier.NULLABLE
+            !upper.isMarkedNullable -> NullabilityQualifier.NOT_NULL
+            else -> null
+        },
+        when {
+            mapping.isReadOnly(lower.toFqNameUnsafe()) -> MutabilityQualifier.READ_ONLY
+            mapping.isMutable(upper.toFqNameUnsafe()) -> MutabilityQualifier.MUTABLE
+            else -> null
+        },
+        isNotNullTypeParameter = false //TODO: unwrap() is NotNullTypeParameter
+    )
+}
+
+private fun composeAnnotations(first: List<FirAnnotationCall>, second: List<FirAnnotationCall>): List<FirAnnotationCall> {
+    return when {
+        first.isEmpty() -> second
+        second.isEmpty() -> first
+        else -> first + second
+    }
+}
+
+private fun FirResolvedTypeRef.extractQualifiersFromAnnotations(
+    typeContainer: FirAnnotationContainer?,
+    isHeadTypeConstructor: Boolean,
+    defaultQualifiersForType: JavaTypeQualifiers?,
+    containerContext: FirJavaEnhancementContext,
+    signatureEnhancement: FirSignatureEnhancement,
+    typeQualifierResolver: FirAnnotationTypeQualifierResolver,
+    containerApplicabilityType: AnnotationTypeQualifierResolver.QualifierApplicabilityType
+): JavaTypeQualifiers {
+    val composedAnnotation =
+        if (isHeadTypeConstructor && typeContainer != null)
+            composeAnnotations(typeContainer.annotations, annotations)
+        else
+            annotations
+
+    fun <T : Any> List<FqName>.ifPresent(qualifier: T) =
+        if (any { fqName -> composedAnnotation.any { it.resolvedFqName == fqName }}) qualifier else null
+
+    fun <T : Any> uniqueNotNull(x: T?, y: T?) = if (x == null || y == null || x == y) x ?: y else null
+
+    val defaultTypeQualifier =
+        if (isHeadTypeConstructor)
+            containerContext.defaultTypeQualifiers?.get(containerApplicabilityType)
+        else
+            defaultQualifiersForType
+
+    val nullabilityInfo = with(signatureEnhancement) {
+        composedAnnotation.extractNullability(typeQualifierResolver)
+            ?: defaultTypeQualifier?.nullability?.let { nullability ->
+                NullabilityQualifierWithMigrationStatus(
+                    nullability,
+                    defaultTypeQualifier.isNullabilityQualifierForWarning
+                )
+            }
+    }
+
+    return JavaTypeQualifiers(
+        nullabilityInfo?.qualifier,
+        uniqueNotNull(
+            READ_ONLY_ANNOTATIONS.ifPresent(
+                MutabilityQualifier.READ_ONLY
+            ),
+            MUTABLE_ANNOTATIONS.ifPresent(
+                MutabilityQualifier.MUTABLE
+            )
+        ),
+        isNotNullTypeParameter = nullabilityInfo?.qualifier == NullabilityQualifier.NOT_NULL && true, /* TODO: isTypeParameter()*/
+        isNullabilityQualifierForWarning = nullabilityInfo?.isForWarningOnly == true
+    )
+}
+
+private fun FirResolvedTypeRef.unwrapEnhancement(): FirResolvedTypeRef = this // TODO
+
+private fun FirResolvedTypeRef.computeQualifiersForOverride(
+    fromSupertypes: Collection<FirResolvedTypeRef>,
+    defaultQualifiersForType: JavaTypeQualifiers?,
+    isHeadTypeConstructor: Boolean,
+    isCovariant: Boolean
+): JavaTypeQualifiers {
+    val superQualifiers = fromSupertypes.map { it.extractQualifiers() }
+    val mutabilityFromSupertypes = superQualifiers.mapNotNull { it.mutability }.toSet()
+    val nullabilityFromSupertypes = superQualifiers.mapNotNull { it.nullability }.toSet()
+    val nullabilityFromSupertypesWithWarning = fromSupertypes
+        .mapNotNull { it.unwrapEnhancement().extractQualifiers().nullability }
+        .toSet()
+
+    val own = extractQualifiersFromAnnotations(isHeadTypeConstructor, defaultQualifiersForType)
+    val ownNullability = own.takeIf { !it.isNullabilityQualifierForWarning }?.nullability
+    val ownNullabilityForWarning = own.nullability
+
+    val isCovariantPosition = isCovariant && isHeadTypeConstructor
+    val nullability =
+        nullabilityFromSupertypes.select(ownNullability, isCovariantPosition)
+            // Vararg value parameters effectively have non-nullable type in Kotlin
+            // and having nullable types in Java may lead to impossibility of overriding them in Kotlin
+            ?.takeUnless { isForVarargParameter && isHeadTypeConstructor && it == NullabilityQualifier.NULLABLE }
+
+    val mutability =
+        mutabilityFromSupertypes
+            .select(MutabilityQualifier.MUTABLE, MutabilityQualifier.READ_ONLY, own.mutability, isCovariantPosition)
+
+    val canChange = ownNullabilityForWarning != ownNullability || nullabilityFromSupertypesWithWarning != nullabilityFromSupertypes
+    val isAnyNonNullTypeParameter = own.isNotNullTypeParameter || superQualifiers.any { it.isNotNullTypeParameter }
+    if (nullability == null && canChange) {
+        val nullabilityWithWarning =
+            nullabilityFromSupertypesWithWarning.select(ownNullabilityForWarning, isCovariantPosition)
+
+        return createJavaTypeQualifiers(
+            nullabilityWithWarning, mutability,
+            forWarning = true, isAnyNonNullTypeParameter = isAnyNonNullTypeParameter
+        )
+    }
+
+    return createJavaTypeQualifiers(
+        nullability, mutability,
+        forWarning = nullability == null,
+        isAnyNonNullTypeParameter = isAnyNonNullTypeParameter
+    )
+}
+
+
+
+internal fun FirResolvedTypeRef.computeIndexedQualifiers(
+    typeQualifierResolver: FirAnnotationTypeQualifierResolver,
+    signatureEnhancement: FirSignatureEnhancement,
+    context: FirJavaEnhancementContext,
+    fromOverridden: Collection<FirResolvedTypeRef>,
+    isCovariant: Boolean
+): (Int) -> JavaTypeQualifiers {
+    val indexedFromSupertypes = fromOverridden.map { it.toIndexed(typeQualifierResolver, signatureEnhancement, context) }
+    val indexedThisType = toIndexed(typeQualifierResolver, signatureEnhancement, context)
+
+    // The covariant case may be hard, e.g. in the superclass the return may be Super<T>, but in the subclass it may be Derived, which
+    // is declared to extend Super<T>, and propagating data here is highly non-trivial, so we only look at the head type constructor
+    // (outermost type), unless the type in the subclass is interchangeable with the all the types in superclasses:
+    // e.g. we have (Mutable)List<String!>! in the subclass and { List<String!>, (Mutable)List<String>! } from superclasses
+    // Note that `this` is flexible here, so it's equal to it's bounds
+    val onlyHeadTypeConstructor = isCovariant && fromOverridden.any { true /*equalTypes(it, this)*/ }
+
+    val treeSize = if (onlyHeadTypeConstructor) 1 else indexedThisType.size
+    val computedResult = Array(treeSize) { index ->
+        val isHeadTypeConstructor = index == 0
+        assert(isHeadTypeConstructor || !onlyHeadTypeConstructor) { "Only head type constructors should be computed" }
+
+        val (qualifiers, defaultQualifiers) = indexedThisType[index]
+        val verticalSlice = indexedFromSupertypes.mapNotNull { it.getOrNull(index)?.type }
+
+        // Only the head type constructor is safely co-variant
+        qualifiers.computeQualifiersForOverride(verticalSlice, defaultQualifiers, isHeadTypeConstructor)
+    }
+
+    return { index -> computedResult.getOrElse(index) { JavaTypeQualifiers.NONE } }
 }
 
 internal fun FirResolvedTypeRef.enhanceReturnType(
